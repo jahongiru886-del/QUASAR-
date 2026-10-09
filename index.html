@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quasar</title>
+<meta name="theme-color" content="#02060a">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#02060a;--card:rgba(8,20,16,.76);--tx:#e6fff2;--sub:#82a898;--pr:#39ff88;--bd:rgba(57,255,136,.28);--fs:16px;color-scheme:dark;padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{-webkit-touch-callout:none}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif,"Apple Color Emoji";background:radial-gradient(ellipse at 30% 20%,#06241a 0%,#02060a 60%,#000 100%);color:var(--tx);font-size:var(--fs)}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+.page{display:none;position:relative;z-index:1;padding:16px 16px 110px}
+.page.on{display:block}
+h1{margin:4px 0 14px;font-size:1.6em;color:var(--pr);text-shadow:0 0 14px var(--pr)}
+h3{margin:22px 0 10px;font-size:1.05em;display:flex;justify-content:space-between;align-items:center}
+h3 small{color:var(--sub);font-weight:400;font-size:.75em}
+.news{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory}
+.n{flex:0 0 78%;scroll-snap-align:start;border-radius:18px;padding:16px;min-height:130px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;border:1px solid var(--bd);background:var(--card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.n::before{content:"";position:absolute;inset:0;opacity:.35;background:var(--g)}
+.n>*{position:relative}
+.n .em{position:absolute;right:12px;top:6px;font-size:44px}
+.n b{line-height:1.3}
+.n span{font-size:.8em;color:var(--pr);margin-top:4px}
+.g1{--g:linear-gradient(135deg,#00ff9d,transparent)}
+.g2{--g:linear-gradient(135deg,#00e5ff,transparent)}
+.g3{--g:linear-gradient(135deg,#b6ff00,transparent)}
+.g4{--g:linear-gradient(135deg,#8a5cff,transparent)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 0 18px rgba(57,255,136,.08)}
+.row{display:flex;gap:12px;align-items:center;cursor:pointer}
+.th{flex:0 0 54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;border:1px solid var(--bd);background:var(--g)}
+.row b{display:block}
+.row span{color:var(--sub);font-size:.85em}
+.sp{position:relative;cursor:pointer}
+.sp .tag{display:inline-block;background:var(--pr);color:#02160c;font-size:.7em;font-weight:800;padding:3px 8px;border-radius:8px;margin-bottom:8px}
+.sp p{margin:0;line-height:1.55;filter:blur(7px);transition:filter .3s;user-select:none}
+.sp.open p{filter:none;user-select:auto}
+.sp .hint{position:absolute;left:0;right:0;top:55%;text-align:center;font-weight:600;color:var(--pr)}
+.sp.open .hint{display:none}
+.rnd .img{height:190px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:72px;margin-bottom:12px;border:1px solid var(--bd);background:var(--g)}
+.rnd h2{margin:0 0 6px}
+.rnd p{margin:0 0 12px;line-height:1.55;color:var(--sub)}
+.btn{padding:11px 16px;border:0;border-radius:12px;background:var(--pr);color:#02160c;font-size:.95em;font-weight:700;box-shadow:0 0 16px var(--pr)}
+.btn.g{background:transparent;color:var(--pr);border:1px solid var(--pr);box-shadow:none}
+.sbar{display:flex;gap:8px}
+.sbar input,#login input{flex:1;min-width:0;padding:14px 16px;border:1px solid var(--bd);border-radius:14px;font-size:1em;background:rgba(0,0,0,.45);color:var(--tx);outline:none}
+.sbar input:focus,#login input:focus{border-color:var(--pr);box-shadow:0 0 14px rgba(57,255,136,.4)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.chip{padding:8px 14px;border-radius:20px;background:var(--card);border:1px solid var(--bd);font-size:.9em;cursor:pointer}
+.msg{text-align:center;color:var(--sub);padding:26px 8px}
+.set{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.set b{display:block}
+.set span{color:var(--sub);font-size:.82em}
+.sw{width:50px;height:30px;border-radius:15px;background:#2a3b34;position:relative;flex:0 0 50px;cursor:pointer;transition:.2s}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#cfe;transition:.2s}
+.sw.on{background:var(--pr)}
+.sw.on::after{left:23px}
+.dots{display:flex;gap:10px}
+.dot{width:28px;height:28px;border-radius:50%;cursor:pointer;border:3px solid transparent}
+.dot.sel{border-color:#fff}
+input[type=range]{width:120px;accent-color:var(--pr)}
+.me{text-align:center}
+.av{width:92px;height:92px;border-radius:50%;margin:6px auto 12px;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:800;color:#02160c;background:var(--pr);box-shadow:0 0 28px var(--pr)}
+.me h2{margin:0 0 4px}
+.stats{display:flex;gap:10px;margin:14px 0}
+.stats div{flex:1;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:12px 6px}
+.stats b{display:block;font-size:1.4em;color:var(--pr)}
+.stats span{font-size:.75em;color:var(--sub)}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;background:rgba(2,10,8,.94);border-top:1px solid var(--bd);padding:8px 4px calc(8px + env(safe-area-inset-bottom,0px))}
+nav button{flex:1;border:0;background:none;color:var(--sub);font-size:.6em;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0}
+nav button i{font-style:normal;font-size:1.7em}
+nav button.on{color:var(--pr);font-weight:700;text-shadow:0 0 10px var(--pr)}
+#login{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(0,4,3,.55)}
+#login .box{width:100%;max-width:360px;text-align:center}
+#login .big{font-size:64px;filter:drop-shadow(0 0 16px var(--pr))}
+#login h1{font-size:1.9em}
+#login p{color:var(--sub);margin:0 0 18px}
+#login .row2{display:flex;flex-direction:column;gap:12px}
+.hide{display:none!important}
+#login .box{max-height:92vh;overflow:auto}
+.langs{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+.lg{padding:6px 10px;border-radius:12px;border:1px solid var(--bd);background:rgba(0,0,0,.4);color:var(--tx);font-size:.8em}
+.lg.on{border-color:var(--pr);color:var(--pr);box-shadow:0 0 10px var(--pr)}
+.tabs{display:flex;gap:8px;margin-bottom:12px}
+.tb{flex:1;padding:10px;border:1px solid var(--bd);background:transparent;color:var(--sub);border-radius:12px;font-weight:600}
+.tb.on{color:#02160c;background:var(--pr);border-color:var(--pr)}
+body{text-transform:lowercase}
+button{text-transform:lowercase}
+::placeholder{text-transform:lowercase}
+.me{text-transform:none!important}
+.page.iR{animation:inR .36s cubic-bezier(.2,.8,.2,1)}
+.page.iL{animation:inL .36s cubic-bezier(.2,.8,.2,1)}
+@keyframes inR{from{opacity:0;transform:translateX(34px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes inL{from{opacity:0;transform:translateX(-34px) scale(.98)}to{opacity:1;transform:none}}
+nav button.on i{animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{0%{transform:translateY(9px) scale(.6)}100%{transform:none}}
+.qh{display:flex;justify-content:space-between;color:var(--sub);font-size:.85em}
+.qh span:nth-child(2){color:var(--pr);font-weight:800;font-size:1.3em}
+.qt{height:8px;border-radius:8px;background:rgba(255,255,255,.1);overflow:hidden;margin:10px 0}
+.qt i{display:block;height:100%;background:var(--pr);box-shadow:0 0 10px var(--pr);transform-origin:left;transition:transform 1s linear}
+.opt{display:block;width:100%;text-align:left;padding:14px;margin:8px 0;border-radius:14px;border:1px solid var(--bd);background:rgba(0,0,0,.35);color:var(--tx);font-size:1em}
+.opt.ok{border-color:#39ff88;background:rgba(57,255,136,.25)}
+.opt.no{border-color:#ff4d5e;background:rgba(255,77,94,.25)}
+.lb{display:flex;align-items:center;gap:10px;cursor:pointer}
+.lb .rk{width:32px;font-weight:800;color:var(--pr)}
+.lb .pt{margin-left:auto;font-weight:700;color:var(--pr)}
+nav button svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:block}
+nav button.on svg{filter:drop-shadow(0 0 6px var(--pr))}
+.lo{width:22px;height:22px;margin-right:8px;flex:0 0 22px}
+body.acc nav{display:none}
+.abar{position:sticky;top:0;z-index:4;padding:8px 16px 10px;margin:0 -16px 8px;background:rgba(2,10,8,.96);border-bottom:1px solid var(--bd)}
+.qa{flex:0 0 36px;width:36px;height:36px;padding:6px;border-radius:10px;border:1px solid var(--bd);background:rgba(0,0,0,.35);color:var(--pr)}
+.qa svg{width:100%;height:100%;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:block}
+.qa.on{background:var(--pr);color:#02160c}
+.rnd img{display:block;width:100%;max-height:260px;object-fit:cover;border-radius:14px;margin-bottom:12px;border:1px solid var(--bd)}
+img.th{object-fit:cover;width:54px}
+.chip.on{border-color:var(--pr);color:var(--pr);box-shadow:0 0 10px var(--pr)}
+.bub{max-width:80%;padding:10px 14px;border-radius:16px;margin:6px 0;background:var(--card);border:1px solid var(--bd);word-break:break-word}
+.bub.mn{margin-left:auto;background:rgba(57,255,136,.18);border-color:var(--pr)}
+.lk{display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;margin-top:10px}
+.err{color:#ff6b7a;font-size:.85em;min-height:1.2em}
+.by{font-size:.76em;color:var(--sub);margin:-8px 0 10px}
+.by b{color:var(--pr);text-shadow:0 0 8px var(--pr)}
+.page,nav{transition:opacity .6s}
+body.zoom .page,body.zoom nav{opacity:.08}
+.card,.n,.sbar,.chip,.av,.stats div,.th{transition:transform .35s cubic-bezier(.2,.9,.3,1.2),box-shadow .35s;-webkit-user-select:none;user-select:none}
+.zoomed{transform:scale(1.14);position:relative;z-index:3;box-shadow:0 0 36px var(--pr),0 0 0 1px var(--pr)}
+.news{padding:14px 0;margin:-8px 0}
+</style>
+</head>
+<body>
+<canvas id="sky"></canvas>
+
+<div id="login">
+<div class="box card">
+<div class="big">🪐</div>
+<h1>Quasar</h1>
+<div class="by">created by <b class="me">@ABEGNALE</b> &amp; <b>claude ai</b></div>
+<div class="langs" id="lg1"></div>
+<p>Hisobingizga kiring yoki yangisini yarating</p>
+<div class="tabs"><button class="tb on" id="tin">Kirish</button><button class="tb" id="tup">Ro'yxatdan o'tish</button></div>
+<div class="row2">
+<input id="nm" maxlength="20" placeholder="Nickname" autocomplete="username">
+<input id="pw" type="password" maxlength="40" placeholder="Parol" autocomplete="current-password">
+<input id="pw2" type="password" maxlength="40" placeholder="Parolni takrorlang" class="hide" autocomplete="new-password">
+<div class="err" id="err"></div>
+<button class="btn" id="in">Kirish 🚀</button></div>
+</div>
+</div>
+
+<div id="app" class="hide">
+<section class="page on" id="p-home">
+<h1>🌌 Quasar</h1>
+<div class="by">created by <b class="me">@ABEGNALE</b> &amp; <b>claude ai</b></div>
+<p style="margin:-6px 0 0;color:var(--sub)">Salom, <b id="hi" style="color:var(--pr)"></b> 👋</p>
+<h3>So'nggi yangiliklar <small>namuna</small></h3>
+<div class="news">
+<div class="n g1"><div class="em">🚀</div><b>Kosmos tadqiqotlarida yangi bosqich</b><span>Fan · bugun</span></div>
+<div class="n g2"><div class="em">🏛️</div><b>Qadimiy shahar qoldiqlari o'rganilmoqda</b><span>Tarix · kecha</span></div>
+<div class="n g3"><div class="em">⚽</div><b>Sport olamidan so'nggi natijalar</b><span>Sport · 2 kun oldin</span></div>
+<div class="n g4"><div class="em">🌿</div><b>Tabiat muhofazasi bo'yicha yangi loyiha</b><span>Tabiat · 3 kun oldin</span></div>
+</div>
+<h3>Tanlangan maqolalar</h3>
+<div class="card row" data-a="0"><div class="th g1">🏙️</div><div><b>Toshkent</b><span>O'zbekiston poytaxti</span></div></div>
+<div class="card row" data-a="1"><div class="th g2">👑</div><div><b>Amir Temur</b><span>Temuriylar davlati asoschisi</span></div></div>
+<h3>Spoiler <small>bosib oching</small></h3>
+<div class="card sp" id="sp"><span class="tag">SPOILER</span><p>Bilasizmi? Samarqanddagi Registon maydoni uchta madrasadan iborat bo'lib, asrlar davomida ilm markazi bo'lgan.</p><div class="hint">👆 Ochish uchun bosing</div></div>
+<h3>Tasodifiy maqola</h3>
+<div class="card rnd" id="rnd"></div>
+</section>
+
+<section class="page" id="p-search">
+<h1>🔎 Qidiruv</h1>
+<div class="sbar"><input id="q" type="search" placeholder="Maqola nomini yozing..." autocomplete="off"><button class="btn" id="go">Izla</button></div>
+<div class="msg" style="text-align:left;padding:14px 0 0">Maqola tili:</div><div class="langs" id="lg3" style="justify-content:flex-start;margin:6px 0 0"></div><div class="chips" id="cts"></div><div id="res"></div>
+</section>
+
+<section class="page" id="p-quiz"><h1>🧠 Viktorina</h1><div id="qz"></div></section>
+<section class="page" id="p-top"><h1>🏆 Reyting</h1><div id="tp"></div></section>
+<section class="page" id="p-set">
+<h1>⚙️ Sozlamalar</h1>
+<div class="card set"><div><b>Kosmos harakati</b><span>Yulduz va sayyoralar</span></div><div class="sw on" id="mv"></div></div>
+<div class="card set"><div><b>Harf o'lchami</b><span>O'qish qulayligi</span></div><input type="range" id="fs" min="14" max="22" value="16"></div>
+<div class="card set"><div><b>Neon rang</b><span>Tugma va yorug'lik</span></div><div class="dots" id="dots"></div></div>
+<div class="card set"><div><b>Ovoz</b><span>Tovush effektlari</span></div><div class="sw on" id="snd"></div></div>
+<div class="card set"><div><b>Zum</b><span>Fon yoki istalgan narsani 0.5 soniya bosib turing</span></div><b>🔭</b></div>
+<div class="card"><div><b>Til</b><span>Maqolalar tili</span></div><div class="langs" id="lg2" style="margin:12px 0 0"></div></div>
+</section>
+
+<section class="page" id="p-me">
+<div class="abar"><button class="btn g" id="xacc">← Hisobdan chiqish</button></div>
+<div class="card me">
+<div class="av" id="av"></div>
+<h2 id="mn"></h2>
+<span style="color:var(--sub);font-size:.85em">Kosmik tadqiqotchi</span>
+<div class="stats"><div id="sf1" style="cursor:pointer"><b id="n1">0</b><span>Obunachilar</span></div><div id="sf2" style="cursor:pointer"><b id="n2">0</b><span>Obunalar</span></div><div><b id="st1">0</b><span>Ko'rilgan maqola</span></div></div>
+<span id="st2" class="hide"></span>
+<button class="btn g" id="out">🚪 Akkauntni almashtirish</button>
+<button class="btn g" id="del" style="margin-top:8px">🗑️ Hisobni o'chirish</button>
+</div>
+<div id="acx"></div>
+<template id="ct"><div class="card"><h3 style="margin:0 0 12px;display:block">Yaratuvchi bilan bog'lanish</h3>
+<div class="set"><span>To'liq ism</span><b class="me">JAHONGIR UMAROV</b></div>
+<div class="set" style="margin-top:8px"><span>Nickname</span><b class="me">ABEGNALE</b></div>
+<a class="btn g lk" href="https://instagram.com/damnabegnale" target="_blank" rel="noopener"><svg class="lo" viewBox="0 0 24 24"><defs><linearGradient id="ig" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#feda75"/><stop offset=".35" stop-color="#fa7e1e"/><stop offset=".6" stop-color="#d62976"/><stop offset="1" stop-color="#4f5bd5"/></linearGradient></defs><rect width="24" height="24" rx="6.5" fill="url(#ig)"/><rect x="5.2" y="5.2" width="13.6" height="13.6" rx="4" fill="none" stroke="#fff" stroke-width="1.7"/><circle cx="12" cy="12" r="3.2" fill="none" stroke="#fff" stroke-width="1.7"/><circle cx="16.4" cy="7.6" r="1" fill="#fff"/></svg>Instagram @damnabegnale</a>
+<a class="btn g lk" href="https://t.me/ujl4over" target="_blank" rel="noopener"><svg class="lo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#2AABEE"/><path d="M5.5 11.8l11.2-4.3c.5-.2 1 .1.8.9l-1.9 9c-.1.6-.5.8-1 .5l-2.9-2.1-1.4 1.4c-.2.2-.3.3-.6.3l.2-3 5.4-4.9c.2-.2 0-.3-.3-.1l-6.7 4.2-2.9-.9c-.6-.2-.6-.6.1-.9z" fill="#fff"/></svg>Telegram @ujl4over</a>
+</div>
+<div class="card"><h3 style="margin:0 0 8px;display:block">Quasar Claude yordamida yaratilgan</h3>
+<p style="color:var(--sub);line-height:1.5;margin:0 0 4px">Shaxsiy bot yoki sayt yaratmoqchimisiz? Claude AI yordamchisi g'oya topish, kod yozish va xatolarni tuzatishda yordam beradi. Ilovani yuklab oling.</p>
+<a class="btn g lk" href="https://apps.apple.com/us/app/claude/id6473753684" target="_blank" rel="noopener"><svg class="lo" viewBox="0 0 24 24"><path fill="#fff" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>App Store</a>
+<a class="btn g lk" href="https://play.google.com/store/apps/details?id=com.anthropic.claude" target="_blank" rel="noopener"><svg class="lo" viewBox="0 0 24 24"><path d="M4 2.8v18.4l9.2-9.2z" fill="#00c3ff"/><path d="M4 2.8l12.2 7-3 2.2z" fill="#00f076"/><path d="M4 21.2l12.2-7-3-2.2z" fill="#ff3a44"/><path d="M16.2 9.8l4 2.2-4 2.2-3-2.2z" fill="#ffd500"/></svg>Google Play</a></div></template>
+</section>
+
+<nav>
+<button class="on" data-p="home"><i><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></i>Bosh sahifa</button>
+<button data-p="search"><i><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></i>Qidiruv</button>
+<button data-p="quiz"><i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7"/><circle cx="12" cy="17" r=".6"/></svg></i>Viktorina</button>
+<button data-p="top"><i><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H4v1a4 4 0 0 0 4 4M16 6h4v1a4 4 0 0 1-4 4M12 13v4M8 20h8M10 17h4"/></svg></i>Reyting</button>
+<button data-p="set"><i><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></i>Sozlamalar</button>
+<button data-p="me"><i><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></i>Hisob</button>
+</nav>
+</div>
+
+<script>
+function $(i){return document.getElementById(i)}
+function esc(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML}
+var LS={g:function(k,d){try{var v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}},s:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+/* ---- KOSMOS FONI (yengil) ---- */
+var cv=$("sky"),cx=cv.getContext("2d"),W,H,K=.75,px=0,py=0,tx=0,ty=0,move=true,stars=[],bodies=[],S={};
+function size(){W=cv.width=Math.round(innerWidth*K);H=cv.height=Math.round(innerHeight*K)}
+size();addEventListener("resize",size);
+var seed=7;function R(){seed=(seed*16807)%2147483647;return seed/2147483647}
+for(var i0=0;i0<100;i0++)stars.push({x:Math.random(),y:Math.random(),z:Math.random()*.9+.1,t:Math.random()*6,tw:i0<28});
+function sprite(n,fn){var c=document.createElement("canvas");c.width=c.height=n;fn(c.getContext("2d"),n);return c}
+function blob(g,x,y,rad,col){g.fillStyle=col;g.beginPath();for(var k=0;k<7;k++){var a=k/7*6.28,rr=rad*(.6+R()*.6);g.lineTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr)}g.closePath();g.fill()}
+function ball(g,n,pad,base,detail){
+var r=n/2-pad,c=n/2;
+g.save();g.beginPath();g.arc(c,c,r,0,6.3);g.clip();
+g.fillStyle=base;g.fillRect(0,0,n,n);
+detail(g,c,r);
+var s=g.createRadialGradient(c-r*.4,c-r*.4,r*.1,c,c,r*1.05);
+s.addColorStop(0,"rgba(255,255,255,.18)");s.addColorStop(.5,"rgba(0,0,0,0)");s.addColorStop(1,"rgba(0,0,0,.78)");
+g.fillStyle=s;g.fillRect(0,0,n,n);g.restore()}
+
+S.earth=sprite(128,function(g,n){
+ball(g,n,6,"#1a5fc4",function(g,c,r){
+var i,cols=["#2f9444","#3f8a3a","#a08a45"];
+for(i=0;i<9;i++)blob(g,c+(R()-.5)*r*1.5,c+(R()-.5)*r*1.5,r*(.18+R()*.22),cols[i%3]);
+g.fillStyle="rgba(255,255,255,.55)";
+for(i=0;i<14;i++){g.beginPath();g.ellipse(c+(R()-.5)*r*1.8,c+(R()-.5)*r*1.8,r*(.15+R()*.25),r*.07,0,0,6.3);g.fill()}});
+g.strokeStyle="rgba(130,200,255,.45)";g.lineWidth=3;g.beginPath();g.arc(n/2,n/2,n/2-5,0,6.3);g.stroke()});
+
+S.mars=sprite(96,function(g,n){
+ball(g,n,4,"#b8512c",function(g,c,r){
+var i,cols=["#7e3318","#d98a55","#94391c"];
+for(i=0;i<8;i++)blob(g,c+(R()-.5)*r*1.5,c+(R()-.5)*r*1.5,r*(.14+R()*.2),cols[i%3]);
+g.fillStyle="#f2e6e0";g.beginPath();g.ellipse(c,c-r*.95,r*.45,r*.18,0,0,6.3);g.fill()})});
+
+S.jup=sprite(160,function(g,n){
+ball(g,n,6,"#c99a6a",function(g,c,r){
+var cols=["#ead2ac","#b87c4b","#dcb88c","#9c6439","#f0dcc0"],y=0,k=0;
+while(y<n){var h=6+R()*14;g.fillStyle=cols[k++%5];g.fillRect(0,y,n,h);y+=h}
+g.fillStyle="#b5472f";g.beginPath();g.ellipse(c+r*.25,c+r*.3,r*.22,r*.12,0,0,6.3);g.fill()})});
+
+S.sat=sprite(220,function(g,n){
+var c=n/2;
+function ring(a0,a1){g.save();g.translate(c,c);g.rotate(-.35);
+[[88,9,"rgba(225,205,160,.75)"],[74,6,"rgba(170,150,110,.7)"],[62,4,"rgba(215,195,150,.6)"]].forEach(function(q){
+g.strokeStyle=q[2];g.lineWidth=q[1];g.beginPath();g.ellipse(0,0,q[0],q[0]*.3,0,a0,a1);g.stroke()});g.restore()}
+ring(Math.PI,6.2832);
+ball(g,n,62,"#d9c28c",function(g){for(var y=0;y<n;y+=9){g.fillStyle=R()<.5?"rgba(160,130,80,.35)":"rgba(255,240,200,.25)";g.fillRect(0,y,n,5)}});
+ring(0,Math.PI)});
+
+S.moon=sprite(96,function(g,n){
+ball(g,n,4,"#a8a8a8",function(g,c,r){
+for(var i=0;i<12;i++){var x=c+(R()-.5)*r*1.6,y=c+(R()-.5)*r*1.6,q=r*(.08+R()*.14);
+g.fillStyle="rgba(70,70,70,.55)";g.beginPath();g.arc(x,y,q,0,6.3);g.fill();
+g.strokeStyle="rgba(230,230,230,.35)";g.lineWidth=1;g.stroke()}})});
+
+S.nep=sprite(110,function(g,n){
+ball(g,n,5,"#2c52d8",function(g,c,r){
+for(var y=0;y<n;y+=10){g.fillStyle=R()<.5?"rgba(120,160,255,.35)":"rgba(10,30,120,.3)";g.fillRect(0,y,n,5)}
+g.fillStyle="rgba(10,25,100,.6)";g.beginPath();g.ellipse(c-r*.2,c+r*.2,r*.2,r*.1,0,0,6.3);g.fill()})});
+
+S.bh=sprite(240,function(g,n){
+var c=n/2,i,t;
+var gl=g.createRadialGradient(c,c,20,c,c,c);gl.addColorStop(0,"rgba(57,255,136,.28)");gl.addColorStop(1,"rgba(57,255,136,0)");
+g.fillStyle=gl;g.fillRect(0,0,n,n);
+function disk(a0,a1){g.save();g.translate(c,c);g.rotate(-.2);
+for(i=0;i<14;i++){t=i/13;var rx=112-t*58;
+g.strokeStyle="rgba("+(120+t*120|0)+",255,"+(80+t*110|0)+","+(.08+t*.5)+")";
+g.lineWidth=6;g.beginPath();g.ellipse(0,0,rx,rx*.27,0,a0,a1);g.stroke()}g.restore()}
+disk(Math.PI,6.2832);
+g.fillStyle="#000";g.shadowColor="#aaffcc";g.shadowBlur=16;g.beginPath();g.arc(c,c,36,0,6.3);g.fill();g.shadowBlur=0;
+g.strokeStyle="rgba(230,255,215,.9)";g.lineWidth=2.5;g.beginPath();g.arc(c,c,37,0,6.3);g.stroke();
+g.strokeStyle="rgba(190,255,170,.55)";g.lineWidth=7;g.beginPath();g.arc(c,c,46,Math.PI*1.1,Math.PI*1.9);g.stroke();
+g.strokeStyle="rgba(190,255,170,.3)";g.lineWidth=5;g.beginPath();g.arc(c,c,45,Math.PI*.15,Math.PI*.85);g.stroke();
+disk(0,Math.PI)});
+
+bodies=[
+{s:S.bh,d:.55,x:.5,y:.42,vx:.0008,vy:.0003,z:.2,bh:1},
+{s:S.jup,d:.36,x:.68,y:.78,vx:-.003,vy:-.001,z:.3},
+{s:S.sat,d:.46,x:.18,y:.9,vx:.0035,vy:-.0015,z:.4},
+{s:S.earth,d:.22,x:.82,y:.2,vx:-.004,vy:.0015,z:.5},
+{s:S.nep,d:.15,x:.92,y:.55,vx:-.004,vy:.001,z:.6},
+{s:S.mars,d:.1,x:.12,y:.45,vx:.005,vy:-.002,z:.7},
+{s:S.moon,d:.07,x:.45,y:.08,vx:.006,vy:.002,z:.9}];
+
+addEventListener("pointermove",function(e){tx=(e.clientX/innerWidth-.5)*2;ty=(e.clientY/innerHeight-.5)*2});
+addEventListener("deviceorientation",function(e){if(e.gamma!=null){tx=Math.max(-1,Math.min(1,e.gamma/30));ty=Math.max(-1,Math.min(1,(e.beta-45)/30))}});
+
+var lt=0,zm=0,zt=0;
+function frame(t){
+requestAnimationFrame(frame);
+var dt=Math.min((t-lt)/1000,.05);lt=t;
+if(!dt)return;
+cx.clearRect(0,0,W,H);
+px+=(tx-px)*.06;py+=(ty-py)*.06;zm+=(zt-zm)*Math.min(1,dt*2.5);
+var m=Math.min(W,H),i,s,b,X,Y,d;
+cx.fillStyle="#fff";
+for(i=0;i<stars.length;i++){s=stars[i];
+if(move){s.y+=s.z*.012*dt;s.x-=s.z*.004*dt;if(s.y>1){s.y=0;s.x=Math.random()}if(s.x<0)s.x=1}
+X=((s.x*W-px*20*s.z)%W+W)%W;Y=((s.y*H-py*20*s.z)%H+H)%H;X=(X-W/2)*(1+zm*2*s.z)+W/2;Y=(Y-H/2)*(1+zm*2*s.z)+H/2;
+cx.globalAlpha=s.tw?.35+.65*Math.abs(Math.sin(t/900+s.t)):.55+s.z*.4;
+cx.fillRect(X,Y,s.z*1.8+.6,s.z*1.8+.6)}
+cx.globalAlpha=.92;
+for(i=0;i<bodies.length;i++){b=bodies[i];
+if(move){b.x+=b.vx*dt;b.y+=b.vy*dt;if(b.x>1.35)b.x=-.35;if(b.x<-.35)b.x=1.35;if(b.y>1.35)b.y=-.35;if(b.y<-.35)b.y=1.35}
+d=b.d*m;X=b.x*W-px*40*b.z;Y=b.y*H-py*40*b.z+Math.sin(t/2800+b.d*30)*4;var k=1+zm*1.5*(1.1-b.z);d*=k;X=(X-W/2)*k+W/2;Y=(Y-H/2)*k+H/2;
+if(b.bh){cx.save();cx.translate(X,Y);cx.rotate(-.12+Math.sin(t/7000)*.1);cx.drawImage(b.s,-d/2,-d/2,d,d);cx.restore()}
+else cx.drawImage(b.s,X-d/2,Y-d/2,d,d)}
+cx.globalAlpha=1}
+requestAnimationFrame(frame);
+
+/* ---- 2 soniya bosib turish = zum ---- */
+var hold=0,zdone=0;
+var zo=null,OBJ=".card,.n,.sbar,.chip,.av,.stats div,.th";
+function rel(){clearTimeout(hold);zt=0;document.body.classList.remove("zoom");if(zo){zo.classList.remove("zoomed");zo=null}}
+addEventListener("pointerdown",function(e){
+zdone=0;clearTimeout(hold);
+var t=e.target.closest?e.target:e.target.parentElement,o=t&&t.closest(OBJ);
+if(o){hold=setTimeout(function(){zo=o;o.classList.add("zoomed");zdone=1;if(navigator.vibrate)navigator.vibrate(25)},HOLD);return}
+if(t&&t.closest("button,input,nav"))return;
+hold=setTimeout(function(){zt=1;zdone=1;document.body.classList.add("zoom");if(navigator.vibrate)navigator.vibrate(25)},HOLD)});
+addEventListener("pointerup",rel);addEventListener("pointercancel",rel);
+addEventListener("click",function(e){if(zdone){e.stopPropagation();e.preventDefault();zdone=0}},true);
+
+/* ---- MA'LUMOT ---- */
+var DB=[
+{t:"Toshkent",e:"🏙️",g:"g1",x:"Toshkent — O'zbekistonning poytaxti va eng yirik shahri. Markaziy Osiyoning muhim madaniy va iqtisodiy markazlaridan biri."},
+{t:"Amir Temur",e:"👑",g:"g2",x:"Amir Temur (1336–1405) — Temuriylar davlatining asoschisi va buyuk sarkarda. Poytaxti Samarqand bo'lgan."},
+{t:"Samarqand",e:"🕌",g:"g3",x:"Samarqand — O'zbekistonning qadimiy shaharlaridan biri. Registon maydoni va Go'ri Amir maqbarasi bilan mashhur."},
+{t:"Alisher Navoiy",e:"📜",g:"g4",x:"Alisher Navoiy (1441–1501) — buyuk o'zbek shoiri va mutafakkiri. «Xamsa» asari uning mashhur ijodidir."},
+{t:"Quyosh",e:"☀️",g:"g3",x:"Quyosh — Quyosh sistemasining markazidagi yulduz va Yerga yorug'lik hamda issiqlik beruvchi asosiy manba."}
+];
+
+/* ---- NAVIGATSIYA ---- */
+var ORD=["home","search","quiz","top","set","me"],curT="home",prevT="home";
+function tab(p){
+var d=ORD.indexOf(p)>=ORD.indexOf(curT)?"iR":"iL";if(curT!=="me")prevT=curT;curT=p;document.body.classList.toggle("acc",p==="me");
+document.querySelectorAll(".page").forEach(function(e){e.classList.remove("on","iR","iL")});
+$("p-"+p).classList.add("on",d);
+document.querySelectorAll("nav button").forEach(function(b){b.classList.toggle("on",b.dataset.p===p)});
+stopQ();if(p==="quiz")qHome();if(p==="me"){pf=null;cw=null;fl=null;drawAcc()}if(p==="top"){pf=null;cw=null;drawTop()}
+window.scrollTo(0,0)}
+document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){tab(b.dataset.p)}});
+
+/* ---- MAQOLALAR ---- */
+var last=-1,cat="",ALANG="uz";
+function art(a){return a.L[ALANG]||a.L.uz}
+/* ---- HAQIQIY VIKIPEDIYA ---- */
+var CK={geo:{uz:"shahar",kk:"қала",ru:"город",en:"city"},hist:{uz:"tarix",kk:"тарих",ru:"история",en:"history"},lit:{uz:"adabiyot yozuvchi",kk:"әдебиет жазушы",ru:"литература писатель",en:"literature writer"},sci:{uz:"fan olim",kk:"ғылым ғалым",ru:"наука учёный",en:"science scientist"}};
+function jget(u){return fetch(u).then(function(r){if(!r.ok)throw 0;return r.json()})}
+function wapi(l,p){return jget("https://"+l+".wikipedia.org/w/api.php?format=json&origin=*&"+p)}
+function wsum(l,t){return jget("https://"+l+".wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(t))}
+function wrand(l){return jget("https://"+l+".wikipedia.org/api/rest_v1/page/random/summary")}
+function wsearch(q,l,c){
+var s=(q+" "+(c&&CK[c]?CK[c][l]:"")).trim();
+return wapi(l,"action=query&generator=search&gsrlimit=12&prop=pageimages|extracts&exintro=1&explaintext=1&exsentences=2&exlimit=max&piprop=thumbnail&pithumbsize=160&gsrsearch="+encodeURIComponent(s)).then(function(d){
+var P=d.query&&d.query.pages?Object.keys(d.query.pages).map(function(k){return d.query.pages[k]}):[];
+P.sort(function(a,b){return a.index-b.index});return P})}
+var last=-1;
+function rndS(i){
+if(i===undefined){do{i=Math.floor(Math.random()*DB.length)}while(i===last&&DB.length>1)}
+last=i;var a=DB[i],A=art(a);
+$("rnd").innerHTML='<div class="img '+a.g+'">'+a.e+'</div><div data-nt="1"><h2>'+esc(A[0])+'</h2><p>'+esc(A[1])+'</p></div><button class="btn" id="more">🎲 Boshqasi</button> <button class="btn g" id="op">O\'qish</button>';
+$("more").onclick=function(){rnd()};$("op").onclick=function(){show(i)}}
+function rcard(a){
+$("rnd").innerHTML=(a.thumbnail?'<img src="'+esc(a.thumbnail.source)+'" alt="">':'<div class="img g2">🌌</div>')+'<div data-nt="1"><h2>'+esc(a.title)+'</h2><p>'+esc((a.extract||"").slice(0,320))+'</p></div><button class="btn" id="more">🎲 Boshqasi</button> <button class="btn g" id="op">O\'qish</button>';
+$("more").onclick=rnd;$("op").onclick=function(){showT(a.title)}}
+function rnd(){wrand(ALANG).then(rcard).catch(function(){rndS()})}
+$("sp").onclick=function(){this.classList.toggle("open")};
+var views=+LS.g("views",0);
+function seen(){views++;LS.s("views",views);bump();$("st1").textContent=views}
+function cardH(img,t,x,u){return'<div class="card rnd" style="margin-top:14px">'+img+'<div data-nt="1"><h2>'+esc(t)+'</h2><p>'+esc(x)+'</p></div>'+(u?'<a class="btn lk" href="'+esc(u)+'" target="_blank" rel="noopener" style="color:#02160c">To\'liq o\'qish</a>':'')+'<button class="btn g" id="bk" style="margin-top:10px">← Orqaga</button></div>'}
+function showS(i){var a=DB[i],A=art(a);$("res").innerHTML=cardH('<div class="img '+a.g+'">'+a.e+'</div>',A[0],A[1],"");$("bk").onclick=search}
+function showT(t,fb){
+seen();tab("search");$("res").innerHTML='<div class="msg">Yuklanmoqda...</div>';
+wsum(ALANG,t).then(function(a){var u=a.content_urls&&a.content_urls.mobile?a.content_urls.mobile.page:"";
+$("res").innerHTML=cardH(a.thumbnail?'<img src="'+esc(a.thumbnail.source)+'" alt="">':'<div class="img g2">🌌</div>',a.title,a.extract||"",u);$("bk").onclick=search})
+.catch(function(){if(fb!==undefined)showS(fb);else $("res").innerHTML='<div class="msg">Maqola ochilmadi 😕</div>'})}
+function show(i){showT(art(DB[i])[0],i)}
+document.querySelectorAll(".row[data-a]").forEach(function(r){r.onclick=function(){show(+r.dataset.a)}});
+function lsearch(){
+var t=$("q").value.trim().toLowerCase(),r=[];
+DB.forEach(function(a,i){if(cat&&a.c!==cat)return;var A=art(a),all=Object.keys(a.L).map(function(k){return a.L[k][0]}).join(" ");
+if(!t||(A[0]+" "+A[1]+" "+all).toLowerCase().indexOf(t)>-1)r.push(i)});
+var el=$("res");el.innerHTML="";
+if(!r.length){el.innerHTML='<div class="msg">Hech narsa topilmadi 😕</div>';return}
+r.forEach(function(i){var a=DB[i],A=art(a),e=document.createElement("div");e.className="card row";
+e.innerHTML='<div class="th '+a.g+'">'+a.e+'</div><div data-nt="1"><b>'+esc(A[0])+'</b><span>'+esc(A[1].slice(0,70))+'...</span></div>';
+e.onclick=function(){show(i)};el.appendChild(e)})}
+var sreq=0;
+function search(){
+var q=$("q").value.trim(),id=++sreq;
+if(!q&&!cat){lsearch();return}
+$("res").innerHTML='<div class="msg">Qidirilmoqda...</div>';
+wsearch(q,ALANG,cat).then(function(P){
+if(id!==sreq)return;
+if(!P.length){$("res").innerHTML='<div class="msg">Hech narsa topilmadi 😕</div>';return}
+var el=$("res");el.innerHTML="";
+P.forEach(function(a){var e=document.createElement("div");e.className="card row";
+e.innerHTML=(a.thumbnail?'<img class="th" src="'+esc(a.thumbnail.source)+'" alt="">':'<div class="th g2">📄</div>')+'<div data-nt="1"><b>'+esc(a.title)+'</b><span>'+esc((a.extract||"").slice(0,80))+'</span></div>';
+e.onclick=function(){showT(a.title)};el.appendChild(e)})
+}).catch(function(){if(id===sreq)lsearch()})}
+function chips(){search()}
+function setALang(l){ALANG=l;document.querySelectorAll(".ag").forEach(function(b){b.classList.toggle("on",b.dataset.l===l)});search();if($("rnd").innerHTML)rnd()}
+[["","Hammasi"],["geo","🌍 Geografiya"],["hist","📜 Tarix"],["lit","✍️ Adabiyot"],["sci","🔬 Fan"]].forEach(function(c){
+var e=document.createElement("div");e.className="chip"+(c[0]===cat?" on":"");e.textContent=c[1];
+e.onclick=function(){cat=c[0];document.querySelectorAll("#cts .chip").forEach(function(x){x.classList.toggle("on",x===e)});search()};$("cts").appendChild(e)});
+[["uz","🇺🇿 UZ"],["kk","🇰🇿 KZ"],["ru","🇷🇺 RU"],["en","🇬🇧 EN"]].forEach(function(l){
+var b=document.createElement("button");b.className="lg ag";b.dataset.l=l[0];b.textContent=l[1];b.onclick=function(){setALang(l[0])};$("lg3").appendChild(b)});
+$("go").onclick=search;
+$("q").addEventListener("keydown",function(e){if(e.key==="Enter")search()});
+
+/* ---- SOZLAMALAR ---- */
+var root=document.documentElement;
+$("mv").onclick=function(){move=this.classList.toggle("on")};
+$("fs").oninput=function(){root.style.setProperty("--fs",this.value+"px")};
+["#39ff88","#00e5ff","#b6ff00","#c06bff","#ff4fd8"].forEach(function(c,i){
+var d=document.createElement("div");d.className="dot"+(i?"":" sel");d.style.background=c;d.style.boxShadow="0 0 12px "+c;
+d.onclick=function(){root.style.setProperty("--pr",c);root.style.setProperty("--bd",c+"47");document.querySelectorAll(".dot").forEach(function(x){x.classList.remove("sel")});d.classList.add("sel")};
+$("dots").appendChild(d)});
+
+/* ---- OVOZ ---- */
+var HOLD=500,AC=null,snd=true,tk=0;
+function ac(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==="suspended")AC.resume();return AC}
+function beep(f,d,ty,v,sl){var c=ac();if(!c||!snd)return;var o=c.createOscillator(),g=c.createGain(),t=c.currentTime;o.type=ty;o.frequency.setValueAtTime(f,t);if(sl)o.frequency.exponentialRampToValueAtTime(sl,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+d+.02)}
+function tick(){tk^=1;beep(tk?1500:1100,.045,"square",.07)}
+var BL=[[700,.07,"sine",.12,1000],[900,.06,"triangle",.12,500],[500,.08,"square",.05,800],[1200,.05,"sine",.1,1800],[400,.09,"triangle",.14,700]];
+function blip(){var b=BL[Math.random()*BL.length|0];beep(b[0]*(.9+Math.random()*.2),b[1],b[2],b[3],b[4])}
+function good(){beep(660,.1,"sine",.14);setTimeout(function(){beep(990,.16,"sine",.14)},90)}
+function wrong(){beep(220,.25,"sawtooth",.08,110)}
+addEventListener("pointerdown",function(e){var t=e.target.closest&&e.target.closest("button,.card,.n,.chip,.sw,.dot,.lg");if(t)blip()},true);
+$("snd").onclick=function(){snd=this.classList.toggle("on")};
+
+/* ---- VIKTORINA ---- */
+var QS=[
+["Quyosh sistemasidagi eng katta sayyora qaysi?","Jupiter",["Saturn","Neptune","Earth"]],
+["Yorug'lik tezligi taxminan qancha (km/s)?","300 000",["150 000","30 000","3 000 000"]],
+["Katta yoshli odam tanasida nechta suyak bor?","206",["150","306","106"]],
+["Dunyodagi eng baland tog' qaysi?","Everest",["K2","Elbrus","Mont Blanc"]],
+["Amir Temur davlatining poytaxti qaysi shahar edi?","Samarkand",["Bukhara","Tashkent","Khiva"]],
+["«Xamsa» asari muallifi kim?","Navoi",["Babur","Beruni","Ibn Sina"]],
+["Yer Quyoshdan hisoblaganda nechanchi sayyora?","3",["2","4","5"]],
+["Kimyoviy belgisi «Au» bo'lgan element qaysi?","Gold",["Silver","Aluminium","Argon"]],
+["Odam Oyga birinchi marta qaysi yili qadam qo'ydi?","1969",["1961","1972","1957"]],
+["Qora tuynukdan yorug'lik ham chiqa olmaydigan chegara nomi nima?","Event horizon",["Corona","Nebula","Pulsar"]]];
+var qz={i:0,sc:0,ok:0,t:45,ord:[],iv:0,lock:0};
+function me(){return accs()[cur]||{}}
+function nm(n){return String(n).toLowerCase()==="abegnale"?'<span class="me">ABEGNALE</span>':esc(String(n))}
+function stopQ(){clearInterval(qz.iv)}
+function qHome(){stopQ();var a=me();
+$("qz").innerHTML='<div class="card" style="text-align:center"><div style="font-size:54px">🧠</div><h2>Viktorina</h2><p style="color:var(--sub)">10 savol · 45 soniya</p><div class="stats"><div><b>'+(a.pts||0)+'</b><span>Jami ball</span></div><div><b>'+(a.best||0)+'</b><span>Eng yaxshi</span></div></div><button class="btn" id="qs">Boshlash 🚀</button></div>';
+$("qs").onclick=qStart}
+function qStart(){qz.i=0;qz.sc=0;qz.ok=0;qz.ord=QS.map(function(_,i){return i}).sort(function(){return Math.random()-.5});qAsk()}
+function qAsk(){
+clearInterval(qz.iv);var q=QS[qz.ord[qz.i]];qz.t=45;qz.lock=0;
+var op=[q[1]].concat(q[2]).sort(function(){return Math.random()-.5});
+$("qz").innerHTML='<div class="card"><div class="qh"><span>'+(qz.i+1)+' / 10</span><span id="qtm">45</span><span>⭐ '+qz.sc+'</span></div><div class="qt"><i id="qb"></i></div><h3 style="display:block;margin:12px 0">'+esc(q[0])+'</h3><div id="qo"></div></div>';
+op.forEach(function(o){var b=document.createElement("button");b.className="opt";b.textContent=o;b.onclick=function(){qPick(b,o===q[1],q)};$("qo").appendChild(b)});
+qz.iv=setInterval(function(){qz.t--;$("qtm").textContent=qz.t;$("qb").style.transform="scaleX("+qz.t/45+")";tick();if(qz.t<=0)qPick(null,false,q)},1000)}
+function qPick(b,okk,q){
+if(qz.lock)return;qz.lock=1;clearInterval(qz.iv);
+if(okk){qz.sc+=100+qz.t*2;qz.ok++;good()}else wrong();
+document.querySelectorAll(".opt").forEach(function(x){x.disabled=true;if(x.textContent===q[1])x.classList.add("ok")});
+if(b&&!okk)b.classList.add("no");
+setTimeout(function(){qz.i++;if(qz.i>=10)qEnd();else qAsk()},1100)}
+function qEnd(){
+var A=accs(),a=A[cur];if(a){a.pts=(a.pts||0)+qz.sc;a.best=Math.max(a.best||0,qz.sc);save(A);sync()}
+$("qz").innerHTML='<div class="card" style="text-align:center"><div style="font-size:54px">🏁</div><h2>Natija</h2><div class="stats"><div><b>'+qz.ok+'/10</b><span>To\'g\'ri javob</span></div><div><b>+'+qz.sc+'</b><span>Ball</span></div></div><button class="btn" id="qa">Yana o\'ynash 🔁</button> <button class="btn g" id="qr">🏆 Reyting</button></div>';
+$("qa").onclick=qStart;$("qr").onclick=function(){tab("top")}}
+
+/* ---- REYTING, OBUNA, XABAR, DIRECT (umumiy baza) ---- */
+var DBX=null,UID=null,players=[],fol={},msgs=[],pf=null,cw=null,tt="r",usq="";
+function isTop(){return $("p-top").classList.contains("on")}
+function sync(){if(!DBX||!UID||!cur)return;var a=me();DBX.doc("players/"+UID).set({nick:a.n,pts:a.pts||0}).catch(function(){})}
+function pOf(id){return players.filter(function(x){return x.id===id})[0]}
+function refresh(){if(document.body.classList.contains("acc")){accRefresh();return}if(!isTop())return;if(cw){updThread();return}if(pf){drawProf($("tp"));return}if(tt==="r"&&$("ul"))drawList();else redraw()}
+function drawTop(){
+var box=$("tp");
+if(cw){drawChat(box);return}
+if(pf){drawProf(box);return}
+var h='<div class="tabs"><button class="tb'+(tt==="r"?" on":"")+'" id="t1">Reyting</button><button class="tb'+(tt==="d"?" on":"")+'" id="t2">Direct</button></div>';
+if(tt==="r")h+='<div class="sbar" style="margin-bottom:12px"><input id="us" placeholder="Foydalanuvchi qidirish..." autocomplete="off"></div>';
+box.innerHTML=h+'<div id="ul"></div>';
+$("t1").onclick=function(){tt="r";redraw()};$("t2").onclick=function(){tt="d";redraw()};
+if(tt==="r"){$("us").value=usq;$("us").oninput=function(){usq=this.value;drawList()}}
+drawList()}
+function dirList(){
+if(!DBX||!UID)return'<div class="msg">Reyting va Direct tez orada ishga tushadi</div>';
+var c={};
+msgs.forEach(function(m){if(!m.d)return;var o=m.f===UID?m.to:(m.to===UID?m.f:null);if(!o)return;if(!c[o]||c[o].t<m.t)c[o]={t:m.t,x:m.x}});
+var ids=Object.keys(c).sort(function(a,b){return c[b].t-c[a].t});
+if(!ids.length)return'<div class="msg">Hali suhbatlar yo\'q</div>';
+return ids.map(function(id){var p=pOf(id);return'<div class="card lb" data-c="'+esc(id)+'"><span>'+nm(p?p.nick:"?")+'</span><span class="pt" data-nt="1" style="font-weight:400;color:var(--sub);max-width:55%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">'+esc(c[id].x)+'</span></div>'}).join("")}
+function drawList(){
+var el=$("ul");if(!el)return;var h="",L;
+if(tt==="d"){el.innerHTML=dirList();el.querySelectorAll("[data-c]").forEach(function(e){e.onclick=function(){cw=e.dataset.c;redraw()}});return}
+var q=usq.trim().toLowerCase(),n=0;
+if(DBX&&players.length)L=players;else{L=Object.keys(accs()).map(function(k){var a=accs()[k];return{id:"",nick:a.n,pts:a.pts||0}}).sort(function(a,b){return b.pts-a.pts});if(!DBX)h='<div class="msg">Mahalliy reyting (faqat shu qurilma)</div>'}
+L.forEach(function(p,i){if(q&&String(p.nick).toLowerCase().indexOf(q)<0)return;n++;
+var s=(UID&&p.id===UID)||(!p.id&&String(p.nick).toLowerCase()===cur);
+h+='<div class="card lb" data-id="'+esc(p.id)+'"'+(s?' style="border-color:var(--pr)"':'')+'><span class="rk">'+(i<3?["🥇","🥈","🥉"][i]:i+1)+'</span><span>'+nm(p.nick||"?")+'</span><span class="pt">'+p.pts+'</span>'+qaH(p)+'</div>'});
+if(!n)h+='<div class="msg">'+(q?"Hech narsa topilmadi 😕":"Hali hech kim yo'q. Birinchi bo'ling!")+'</div>';
+el.innerHTML=h;
+el.querySelectorAll(".lb").forEach(function(e){if(e.dataset.id)e.onclick=function(){pf=e.dataset.id;redraw()}});qaBind(el)}
+function put(m){var mine=msgs.filter(function(k){return k.f===UID}).slice(-59);mine.push(m);msgs=msgs.filter(function(k){return k.f!==UID}).concat(mine);DBX.doc("msgs/"+UID).set({l:mine}).catch(function(){})}
+function drawProf(box){
+if(document.activeElement&&document.activeElement.id==="mx")return;
+var p=pOf(pf);if(!p){pf=null;redraw();return}
+var mine=pf===UID,f=(fol[UID]||[]).indexOf(pf)>-1,fc=Object.keys(fol).filter(function(k){return fol[k].indexOf(pf)>-1}).length;
+var w=msgs.filter(function(m){return m.to===pf&&!m.d}).sort(function(a,b){return b.t-a.t}).slice(0,20);
+var h='<div class="card" style="text-align:center"><div class="av" style="width:70px;height:70px;font-size:30px">'+esc(String(p.nick).charAt(0).toUpperCase())+'</div><h2 style="margin:0">'+nm(p.nick)+'</h2><div class="stats"><div><b>'+p.pts+'</b><span>Jami ball</span></div><div><b>'+fc+'</b><span>Obunachilar</span></div><div><b>'+(fol[pf]||[]).length+'</b><span>Obunalar</span></div></div>';
+if(UID&&!mine)h+='<button class="btn'+(f?" g":"")+'" id="pf1">'+(f?"✓ Obuna bo'lingan":"➕ Obuna bo'lish")+'</button> <button class="btn" id="pf2">✉️ Direct</button> ';
+h+='<button class="btn g" id="pf0">← Orqaga</button></div>';
+if(UID)h+='<div class="card"><div class="sbar"><input id="mx" maxlength="200" placeholder="Ochiq xabar yozing..."><button class="btn" id="ms">Yuborish</button></div></div>';
+w.forEach(function(m){h+='<div class="card"><b>'+nm(m.n||"?")+'</b><div data-nt="1" style="color:var(--sub);margin-top:4px">'+esc(m.x)+'</div></div>'});
+box.innerHTML=h;
+$("pf0").onclick=function(){pf=null;redraw()};
+if($("pf1"))$("pf1").onclick=function(){toggleF(pf);redraw()};
+if($("pf2"))$("pf2").onclick=function(){cw=pf;pf=null;redraw()};
+if($("ms"))$("ms").onclick=function(){var x=$("mx").value.trim();if(!x)return;put({f:UID,n:me().n,to:pf,x:x.slice(0,200),t:Date.now()});$("mx").value="";redraw()}}
+function drawChat(box){
+if($("dth")){updThread();return}
+var p=pOf(cw);
+box.innerHTML='<div class="card"><button class="btn g" id="cb">← Orqaga</button> <b style="margin-left:8px">'+nm(p?p.nick:"?")+'</b></div><div class="msg" style="padding:4px;font-size:.78em">Sinov rejimi: xabarlar hali maxfiy emas</div><div id="dth"></div><div class="card"><div class="sbar"><input id="dx" maxlength="300" placeholder="Xabar yozing..." autocomplete="off"><button class="btn" id="ds">Yuborish</button></div></div>';
+$("cb").onclick=function(){cw=null;redraw()};
+$("ds").onclick=sendDM;$("dx").addEventListener("keydown",function(e){if(e.key==="Enter")sendDM()});
+updThread()}
+function updThread(){
+var el=$("dth");if(!el)return;
+var L=msgs.filter(function(m){return m.d&&((m.f===UID&&m.to===cw)||(m.f===cw&&m.to===UID))}).sort(function(a,b){return a.t-b.t});
+el.innerHTML=L.length?L.map(function(m){return'<div class="bub'+(m.f===UID?" mn":"")+'" data-nt="1">'+esc(m.x)+'</div>'}).join(""):'<div class="msg">Hali xabarlar yo\'q</div>';
+window.scrollTo(0,document.body.scrollHeight)}
+function sendDM(){var x=$("dx").value.trim();if(!x||!DBX||!UID||!cw)return;put({f:UID,n:me().n,to:cw,x:x.slice(0,300),t:Date.now(),d:1});$("dx").value="";updThread()}
+
+var QI={f:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3-5.5 7-5.5s7 2 7 5.5M19 8v6M16 11h6"/></svg>',u:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3-5.5 7-5.5s7 2 7 5.5M16 11l2 2 4-4"/></svg>',m:'<svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>'};
+var at="s",fl=null;
+function redraw(){if(document.body.classList.contains("acc"))drawAcc();else drawTop()}
+function relist(){if(document.body.classList.contains("acc")){if(at==="s")drawAL()}else drawList()}
+function toggleF(id){if(!DBX||!UID||id===UID)return;var l=(fol[UID]||[]).slice(),i=l.indexOf(id);if(i<0)l.push(id);else l.splice(i,1);fol[UID]=l;DBX.doc("follows/"+UID).set({l:l}).catch(function(){})}
+function qaH(p){if(!UID||!p.id||p.id===UID)return"";var on=(fol[UID]||[]).indexOf(p.id)>-1;return'<button class="qa'+(on?" on":"")+'" data-a="f" data-id="'+esc(p.id)+'">'+(on?QI.u:QI.f)+'</button><button class="qa" data-a="m" data-id="'+esc(p.id)+'">'+QI.m+'</button>'}
+function qaBind(el,cb){el.querySelectorAll(".qa").forEach(function(b){b.onclick=function(e){e.stopPropagation();var id=b.dataset.id;if(b.dataset.a==="f"){toggleF(id);(cb||relist)()}else{cw=id;redraw()}}})}
+function rowH(p){return'<div class="card lb" data-id="'+esc(p.id)+'"><span>'+nm(p.nick||"?")+'</span><span class="pt">'+p.pts+'</span>'+qaH(p)+'</div>'}
+function rowBind(el,cb){el.querySelectorAll(".lb").forEach(function(e){e.onclick=function(){pf=e.dataset.id;redraw()}});qaBind(el,cb)}
+function accHead(){var n1=Object.keys(fol).filter(function(k){return UID&&(fol[k]||[]).indexOf(UID)>-1}).length;$("n1").textContent=n1;$("n2").textContent=UID?(fol[UID]||[]).length:0}
+function accRefresh(){accHead();if(cw){updThread();return}if(pf){drawProf($("acx"));return}if(fl){drawFl($("acx"));return}if(at==="s")drawAL();else if(at==="d")accBody()}
+function drawAcc(){
+accHead();var box=$("acx");
+if(cw){drawChat(box);return}
+if(pf){drawProf(box);return}
+if(fl){drawFl(box);return}
+box.innerHTML='<div class="tabs">'+[["s","Qidiruv"],["d","Direct"],["c","Aloqa"]].map(function(t){return'<button class="tb'+(at===t[0]?" on":"")+'" data-t="'+t[0]+'">'+t[1]+'</button>'}).join("")+'</div><div id="acb"></div>';
+box.querySelectorAll(".tb").forEach(function(b){b.onclick=function(){at=b.dataset.t;drawAcc()}});
+accBody()}
+function accBody(){
+var el=$("acb");if(!el)return;
+if(at==="c"){el.innerHTML=$("ct").innerHTML;return}
+if(at==="d"){el.innerHTML=dirList();el.querySelectorAll("[data-c]").forEach(function(e){e.onclick=function(){cw=e.dataset.c;redraw()}});return}
+if(!$("us2")){el.innerHTML='<div class="sbar" style="margin-bottom:12px"><input id="us2" placeholder="Foydalanuvchi qidirish..." autocomplete="off"></div><div id="ul2"></div>';$("us2").oninput=drawAL}
+drawAL()}
+function drawAL(){
+var el=$("ul2");if(!el)return;
+if(!DBX||!UID){el.innerHTML='<div class="msg">Reyting va Direct tez orada ishga tushadi</div>';return}
+var q=($("us2").value||"").trim().toLowerCase(),h="";
+var L=players.filter(function(p){return p.id!==UID&&(!q||String(p.nick).toLowerCase().indexOf(q)>-1)}).slice(0,20);
+if(!L.length)h='<div class="msg">Hech narsa topilmadi 😕</div>';
+L.forEach(function(p){h+=rowH(p)});
+el.innerHTML=h;rowBind(el)}
+function drawFl(box){
+var ids=fl==="in"?Object.keys(fol).filter(function(k){return(fol[k]||[]).indexOf(UID)>-1}):(fol[UID]||[]);
+var h='<div class="card"><button class="btn g" id="fb">← Orqaga</button> <b style="margin-left:8px">'+(fl==="in"?"Sizga obuna bo'lganlar":"Siz obuna bo'lganlar")+'</b></div><div id="fll">',n=0;
+ids.forEach(function(id){var p=pOf(id);if(p){n++;h+=rowH(p)}});
+if(!n)h+='<div class="msg">Hali hech kim yo\'q</div>';
+box.innerHTML=h+'</div>';
+$("fb").onclick=function(){fl=null;redraw()};
+rowBind($("fll"),function(){drawFl(box)})}
+$("sf1").onclick=function(){fl="in";pf=null;cw=null;drawAcc()};
+$("sf2").onclick=function(){fl="out";pf=null;cw=null;drawAcc()};
+$("xacc").onclick=function(){tab(prevT||"home")};
+(async function(){try{
+if(!window.claude)return;DBX=await claude.use("db");var u=await claude.use("user");
+if(DBX&&u&&u.id)UID=await u.id();if(!DBX)return;
+DBX.collection("players").orderBy("pts","desc").limit(50).onSnapshot(function(s){players=s.docs.map(function(d){var x=d.data();x.id=d.id;return x});refresh()},function(){});
+DBX.collection("follows").onSnapshot(function(s){fol={};s.docs.forEach(function(d){fol[d.id]=d.data().l||[]});refresh()},function(){});
+DBX.collection("msgs").onSnapshot(function(s){msgs=[];s.docs.forEach(function(d){msgs=msgs.concat(d.data().l||[])});refresh()},function(){});
+sync()}catch(e){}})();
+
+/* ---- HISOB (shu qurilmada saqlanadi, parol xeshlanadi) ---- */
+var mode="in",cur="";
+function accs(){try{return JSON.parse(LS.g("accs","{}"))}catch(e){return{}}}
+function save(A){LS.s("accs",JSON.stringify(A))}
+function hex(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return("0"+x.toString(16)).slice(-2)}).join("")}
+function hash(p,s){var e=new TextEncoder();return crypto.subtle.importKey("raw",e.encode(p),"PBKDF2",false,["deriveBits"]).then(function(k){return crypto.subtle.deriveBits({name:"PBKDF2",salt:e.encode(s),iterations:100000,hash:"SHA-256"},k,256)}).then(hex)}
+function bump(){var A=accs();if(A[cur]){A[cur].v=views;save(A)}}
+function setMode(m){mode=m;$("tin").classList.toggle("on",m==="in");$("tup").classList.toggle("on",m==="up");$("pw2").classList.toggle("hide",m==="in");$("in").textContent=m==="in"?"Kirish 🚀":"Hisob yaratish 🚀";$("err").textContent=""}
+$("tin").onclick=function(){setMode("in")};$("tup").onclick=function(){setMode("up")};
+function enter(a){
+cur=a.n.toLowerCase();LS.s("sess",cur);views=a.v||0;
+$("login").classList.add("hide");$("app").classList.remove("hide");
+$("hi").innerHTML=nm(a.n);$("mn").innerHTML="@"+nm(a.n);$("av").textContent=a.n.charAt(0).toUpperCase();
+$("st1").textContent=views;$("st2").textContent=a.l||1;
+$("pw").value="";$("pw2").value="";$("err").textContent="";tab("home");rnd();chips();sync()}
+$("in").onclick=function(){
+var n=$("nm").value.trim(),p=$("pw").value,A=accs(),k=n.toLowerCase(),er=$("err");
+if(!/^[A-Za-z0-9_]{3,20}$/.test(n)){er.textContent="Nickname 3-20 ta belgi: harf, raqam, _";return}
+if(p.length<6){er.textContent="Parol kamida 6 ta belgi";return}
+var bad=function(){er.textContent="Xavfsiz (https) ulanish kerak"};
+if(mode==="up"){
+if(p!==$("pw2").value){er.textContent="Parollar mos kelmadi";return}
+if(A[k]){er.textContent="Bu nickname band";return}
+var s=hex(crypto.getRandomValues(new Uint8Array(12)));
+hash(p,s).then(function(x){A[k]={n:n,s:s,h:x,v:0,l:1};save(A);enter(A[k])}).catch(bad)
+}else{
+var a=A[k];if(!a){er.textContent="Nickname yoki parol noto'g'ri";return}
+hash(p,a.s).then(function(x){if(x!==a.h){er.textContent="Nickname yoki parol noto'g'ri";return}a.l=(a.l||0)+1;save(A);enter(a)}).catch(bad)}};
+["nm","pw","pw2"].forEach(function(i){$(i).addEventListener("keydown",function(e){if(e.key==="Enter")$("in").click()})});
+function toLogin(){$("login").classList.remove("hide");$("app").classList.add("hide")}
+$("out").onclick=function(){LS.s("sess","");toLogin()};
+var dtm=0;
+$("del").onclick=function(){var b=this;
+if(!dtm){dtm=setTimeout(function(){dtm=0;b.textContent="🗑️ Hisobni o'chirish"},3000);b.textContent="⚠️ Yana bosing";return}
+clearTimeout(dtm);dtm=0;b.textContent="🗑️ Hisobni o'chirish";var A=accs();delete A[cur];save(A);LS.s("sess","");toLogin()};
+
+/* ---- TILLAR: uz kk tr ru en ---- */
+var T=[["Hisobingizga kiring yoki yangisini yarating", "Аккаунтыңызға кіріңіз немесе жаңасын жасаңыз", "Войдите в аккаунт или создайте новый", "Sign in or create a new account"], ["Kirish", "Кіру", "Вход", "Sign in"], ["Ro'yxatdan o'tish", "Тіркелу", "Регистрация", "Sign up"], ["Nickname", "Никнейм", "Никнейм", "Nickname"], ["Parol", "Құпиясөз", "Пароль", "Password"], ["Parolni takrorlang", "Құпиясөзді қайталаңыз", "Повторите пароль", "Repeat password"], ["Kirish 🚀", "Кіру 🚀", "Войти 🚀", "Sign in 🚀"], ["Hisob yaratish 🚀", "Аккаунт жасау 🚀", "Создать аккаунт 🚀", "Create account 🚀"], ["Nickname 3-20 ta belgi: harf, raqam, _", "Никнейм 3-20 таңба: әріп, сан, _", "Никнейм 3-20 символов: буквы, цифры, _", "Nickname: 3-20 chars, letters, digits, _"], ["Parol kamida 6 ta belgi", "Құпиясөз кемінде 6 таңба", "Пароль минимум 6 символов", "Password: at least 6 characters"], ["Parollar mos kelmadi", "Құпиясөздер сәйкес емес", "Пароли не совпадают", "Passwords do not match"], ["Bu nickname band", "Бұл никнейм бос емес", "Этот никнейм занят", "This nickname is taken"], ["Nickname yoki parol noto'g'ri", "Никнейм немесе құпиясөз қате", "Неверный никнейм или пароль", "Wrong nickname or password"], ["Xavfsiz (https) ulanish kerak", "Қауіпсіз (https) байланыс керек", "Нужно безопасное (https) соединение", "A secure (https) connection is required"], ["Salom,", "Сәлем,", "Привет,", "Hello,"], ["So'nggi yangiliklar", "Соңғы жаңалықтар", "Последние новости", "Latest news"], ["namuna", "үлгі", "пример", "sample"], ["Kosmos tadqiqotlarida yangi bosqich", "Ғарышты зерттеудегі жаңа кезең", "Новый этап в изучении космоса", "A new stage in space research"], ["Qadimiy shahar qoldiqlari o'rganilmoqda", "Көне қала қалдықтары зерттелуде", "Изучаются остатки древнего города", "Ruins of an ancient city are being studied"], ["Sport olamidan so'nggi natijalar", "Спорт әлемінен соңғы нәтижелер", "Последние результаты из мира спорта", "Latest results from the sports world"], ["Tabiat muhofazasi bo'yicha yangi loyiha", "Табиғатты қорғау бойынша жаңа жоба", "Новый проект по охране природы", "New nature conservation project"], ["Fan · bugun", "Ғылым · бүгін", "Наука · сегодня", "Science · today"], ["Tarix · kecha", "Тарих · кеше", "История · вчера", "History · yesterday"], ["Sport · 2 kun oldin", "Спорт · 2 күн бұрын", "Спорт · 2 дня назад", "Sports · 2 days ago"], ["Tabiat · 3 kun oldin", "Табиғат · 3 күн бұрын", "Природа · 3 дня назад", "Nature · 3 days ago"], ["Tanlangan maqolalar", "Таңдаулы мақалалар", "Избранные статьи", "Featured articles"], ["O'zbekiston poytaxti", "Өзбекстан астанасы", "Столица Узбекистана", "Capital of Uzbekistan"], ["Temuriylar davlati asoschisi", "Темұрилер мемлекетінің негізін қалаушы", "Основатель государства Тимуридов", "Founder of the Timurid Empire"], ["Spoiler", "Спойлер", "Спойлер", "Spoiler"], ["bosib oching", "басып ашыңыз", "нажмите, чтобы открыть", "tap to reveal"], ["Bilasizmi? Samarqanddagi Registon maydoni uchta madrasadan iborat bo'lib, asrlar davomida ilm markazi bo'lgan.", "Білесіз бе? Самарқандтағы Регистан алаңы үш медреседен тұрады және ғасырлар бойы ғылым орталығы болған.", "Знаете ли вы? Площадь Регистан в Самарканде состоит из трёх медресе и веками была центром науки.", "Did you know? Registan Square in Samarkand has three madrasas and was a center of learning for centuries."], ["👆 Ochish uchun bosing", "👆 Ашу үшін басыңыз", "👆 Нажмите, чтобы открыть", "👆 Tap to reveal"], ["Tasodifiy maqola", "Кездейсоқ мақала", "Случайная статья", "Random article"], ["Boshqasi", "Басқасы", "Другая", "Another"], ["O'qish", "Оқу", "Читать", "Read"], ["Orqaga", "Артқа", "Назад", "Back"], ["Qidiruv", "Іздеу", "Поиск", "Search"], ["Maqola nomini yozing...", "Мақала атын жазыңыз...", "Введите название статьи...", "Type an article name..."], ["Izla", "Іздеу", "Найти", "Go"], ["Hech narsa topilmadi 😕", "Ештеңе табылмады 😕", "Ничего не найдено 😕", "Nothing found 😕"], ["Sozlamalar", "Баптаулар", "Настройки", "Settings"], ["Kosmos harakati", "Ғарыш қозғалысы", "Движение космоса", "Space motion"], ["Yulduz va sayyoralar", "Жұлдыздар мен планеталар", "Звёзды и планеты", "Stars and planets"], ["Harf o'lchami", "Қаріп өлшемі", "Размер шрифта", "Font size"], ["O'qish qulayligi", "Оқу ыңғайлылығы", "Удобство чтения", "Reading comfort"], ["Neon rang", "Неон түсі", "Неоновый цвет", "Neon color"], ["Tugma va yorug'lik", "Түйме және жарық", "Кнопки и свечение", "Buttons and glow"], ["Zum", "Зум", "Зум", "Zoom"], ["Fon yoki istalgan narsani 0.5 soniya bosib turing", "Фонды немесе кез келген затты 0.5 секунд басып ұстаңыз", "Удерживайте фон или любой объект 0.5 секунды", "Press and hold the background or anything for 0.5 seconds"], ["Til", "Тіл", "Язык", "Language"], ["Maqolalar tili", "Мақалалар тілі", "Язык статей", "Article language"], ["Hisob", "Аккаунт", "Аккаунт", "Account"], ["Bosh sahifa", "Басты бет", "Главная", "Home"], ["Kosmik tadqiqotchi", "Ғарыш зерттеушісі", "Космический исследователь", "Space explorer"], ["Ko'rilgan maqola", "Қаралған мақала", "Прочитано статей", "Articles read"], ["Kirishlar", "Кірулер", "Входы", "Logins"], ["Chiqish", "Шығу", "Выйти", "Log out"], ["Hisobni o'chirish", "Аккаунтты жою", "Удалить аккаунт", "Delete account"], ["Yana bosing", "Қайта басыңыз", "Нажмите ещё раз", "Tap again"], ["Toshkent", "Ташкент", "Ташкент", "Tashkent"], ["Amir Temur", "Әмір Темір", "Амир Темур", "Timur"], ["Samarqand", "Самарқанд", "Самарканд", "Samarkand"], ["Alisher Navoiy", "Әлішер Науаи", "Алишер Навои", "Alisher Navoi"], ["Quyosh", "Күн", "Солнце", "Sun"], ["Toshkent — O'zbekistonning poytaxti va eng yirik shahri. Markaziy Osiyoning muhim madaniy va iqtisodiy markazlaridan biri.", "Ташкент — Өзбекстанның астанасы және ең үлкен қаласы, Орталық Азияның маңызды орталықтарының бірі.", "Ташкент — столица и крупнейший город Узбекистана, один из важных центров Центральной Азии.", "Tashkent is the capital and largest city of Uzbekistan and a major center of Central Asia."], ["Amir Temur (1336–1405) — Temuriylar davlatining asoschisi va buyuk sarkarda. Poytaxti Samarqand bo'lgan.", "Әмір Темір (1336–1405) — Темұрилер мемлекетінің негізін қалаушы, ұлы қолбасшы. Астанасы Самарқанд болған.", "Амир Темур (1336–1405) — основатель государства Тимуридов и великий полководец. Столица — Самарканд.", "Timur (1336–1405) founded the Timurid Empire and was a great commander. His capital was Samarkand."], ["Samarqand — O'zbekistonning qadimiy shaharlaridan biri. Registon maydoni va Go'ri Amir maqbarasi bilan mashhur.", "Самарқанд — Өзбекстанның көне қалаларының бірі. Регистан алаңы мен Гур-Әмір кесенесімен танымал.", "Самарканд — один из древнейших городов Узбекистана. Известен площадью Регистан и мавзолеем Гур-Эмир.", "Samarkand is one of Uzbekistan's ancient cities, famous for Registan Square and the Gur-e-Amir mausoleum."], ["Alisher Navoiy (1441–1501) — buyuk o'zbek shoiri va mutafakkiri. «Xamsa» asari uning mashhur ijodidir.", "Әлішер Науаи (1441–1501) — ұлы өзбек ақыны, ойшылы. «Хамса» — оның белгілі шығармасы.", "Алишер Навои (1441–1501) — великий узбекский поэт и мыслитель. Его знаменитое произведение — «Хамса».", "Alisher Navoi (1441–1501) was a great Uzbek poet and thinker, famous for his «Khamsa»."], ["Quyosh — Quyosh sistemasining markazidagi yulduz va Yerga yorug'lik hamda issiqlik beruvchi asosiy manba.", "Күн — Күн жүйесінің орталығындағы жұлдыз, Жерге жарық пен жылу беретін негізгі көз.", "Солнце — звезда в центре Солнечной системы, главный источник света и тепла для Земли.", "The Sun is the star at the center of the Solar System and Earth's main source of light and heat."], ["Viktorina", "Викторина", "Викторина", "Quiz"], ["Reyting", "Рейтинг", "Рейтинг", "Leaderboard"], ["10 savol · 45 soniya", "10 сұрақ · 45 секунд", "10 вопросов · 45 секунд", "10 questions · 45 seconds"], ["Jami ball", "Жалпы ұпай", "Всего баллов", "Total points"], ["Eng yaxshi", "Ең жақсы", "Лучший", "Best"], ["Boshlash 🚀", "Бастау 🚀", "Начать 🚀", "Start 🚀"], ["Natija", "Нәтиже", "Результат", "Result"], ["To'g'ri javob", "Дұрыс жауап", "Верных ответов", "Correct answers"], ["Ball", "Ұпай", "Баллы", "Points"], ["Yana o'ynash 🔁", "Қайта ойнау 🔁", "Играть снова 🔁", "Play again 🔁"], ["Mahalliy reyting (faqat shu qurilma)", "Жергілікті рейтинг (тек осы құрылғы)", "Локальный рейтинг (только это устройство)", "Local ranking (this device only)"], ["Hali hech kim yo'q. Birinchi bo'ling!", "Әзірше ешкім жоқ. Бірінші болыңыз!", "Пока никого нет. Будьте первым!", "Nobody yet. Be the first!"], ["Obunachilar", "Жазылушылар", "Подписчики", "Followers"], ["Obuna bo'lish", "Жазылу", "Подписаться", "Follow"], ["Obuna bo'lingan", "Жазылғансыз", "Вы подписаны", "Following"], ["Ochiq xabar yozing...", "Ашық хабар жазыңыз...", "Напишите открытое сообщение...", "Write a public message..."], ["Yuborish", "Жіберу", "Отправить", "Send"], ["Ovoz", "Дыбыс", "Звук", "Sound"], ["Tovush effektlari", "Дыбыс әсерлері", "Звуковые эффекты", "Sound effects"], ["Quyosh sistemasidagi eng katta sayyora qaysi?", "Күн жүйесіндегі ең үлкен планета қайсы?", "Какая планета Солнечной системы самая большая?", "Which is the largest planet in the Solar System?"], ["Yorug'lik tezligi taxminan qancha (km/s)?", "Жарық жылдамдығы шамамен қанша (км/с)?", "Какова примерно скорость света (км/с)?", "About how fast is light (km/s)?"], ["Katta yoshli odam tanasida nechta suyak bor?", "Ересек адамның денесінде неше сүйек бар?", "Сколько костей у взрослого человека?", "How many bones does an adult human have?"], ["Dunyodagi eng baland tog' qaysi?", "Әлемдегі ең биік тау қайсы?", "Какая гора самая высокая в мире?", "What is the highest mountain in the world?"], ["Amir Temur davlatining poytaxti qaysi shahar edi?", "Әмір Темір мемлекетінің астанасы қай қала болды?", "Какой город был столицей государства Амира Темура?", "Which city was the capital of Timur's empire?"], ["«Xamsa» asari muallifi kim?", "«Хамса» шығармасының авторы кім?", "Кто автор «Хамсы»?", "Who wrote the «Khamsa»?"], ["Yer Quyoshdan hisoblaganda nechanchi sayyora?", "Жер Күннен санағанда нешінші планета?", "Какая по счёту от Солнца планета Земля?", "Counting from the Sun, which planet is Earth?"], ["Kimyoviy belgisi «Au» bo'lgan element qaysi?", "Химиялық белгісі «Au» элемент қайсы?", "Какой элемент имеет символ «Au»?", "Which element has the symbol «Au»?"], ["Odam Oyga birinchi marta qaysi yili qadam qo'ydi?", "Адам Айға алғаш рет қай жылы қадам басты?", "В каком году человек впервые ступил на Луну?", "In what year did humans first step on the Moon?"], ["Qora tuynukdan yorug'lik ham chiqa olmaydigan chegara nomi nima?", "Қара құрдымнан жарық та шыға алмайтын шекара қалай аталады?", "Как называется граница чёрной дыры, из-за которой не уходит даже свет?", "What is the boundary of a black hole called, beyond which even light cannot escape?"], ["Oy", "Ай", "Луна", "Moon"], ["Oy — Yerning yagona tabiiy yo'ldoshi. U Yerdan taxminan 384 000 km uzoqlikda joylashgan va okean suvlarining ko'tarilishi hamda pasayishiga ta'sir qiladi.", "Ай — Жердің жалғыз табиғи серігі. Ол Жерден шамамен 384 000 км қашықтықта орналасқан және мұхит толқындарына әсер етеді.", "Луна — единственный естественный спутник Земли. Она находится примерно в 384 000 км от нас и влияет на приливы и отливы.", "The Moon is Earth's only natural satellite. It lies about 384,000 km away and influences ocean tides."], ["Buyuk ipak yo'li", "Ұлы Жібек жолы", "Великий шёлковый путь", "Silk Road"], ["Buyuk ipak yo'li — Sharq va G'arbni bog'lagan qadimiy savdo yo'llari tizimi. Samarqand va Buxoro uning muhim shaharlari bo'lgan.", "Ұлы Жібек жолы — Шығыс пен Батысты байланыстырған көне сауда жолдарының жүйесі. Самарқан мен Бұхара оның маңызды қалалары болған.", "Великий шёлковый путь — система древних торговых путей, соединявших Восток и Запад. Самарканд и Бухара были его важными городами.", "The Silk Road was a network of ancient trade routes linking East and West. Samarkand and Bukhara were key cities along it."], ["Abdulla Qodiriy", "Абдулла Қодирий", "Абдулла Кадыри", "Abdulla Qodiriy"], ["Abdulla Qodiriy (1894–1938) — o'zbek romanchiligining asoschisi. «O'tkan kunlar» romani uning mashhur asaridir.", "Абдулла Қодирий (1894–1938) — өзбек романының негізін қалаушы. «Өткен күндер» романы — оның танымал шығармасы.", "Абдулла Кадыри (1894–1938) — основоположник узбекского романа. Его самое известное произведение — «Минувшие дни».", "Abdulla Qodiriy (1894–1938) founded the Uzbek novel. His best-known work is «Bygone Days»."], ["Hammasi", "Барлығы", "Все", "All"], ["Geografiya", "География", "География", "Geography"], ["Tarix", "Тарих", "История", "History"], ["Adabiyot", "Әдебиет", "Литература", "Literature"], ["Fan", "Ғылым", "Наука", "Science"], ["Maqola tili:", "Мақала тілі:", "Язык статей:", "Article language:"], ["Foydalanuvchi qidirish...", "Пайдаланушыны іздеу...", "Поиск пользователей...", "Search users..."], ["Direct", "Директ", "Директ", "Direct"], ["Hali xabarlar yo'q", "Әзірге хабарлар жоқ", "Сообщений пока нет", "No messages yet"], ["Hali suhbatlar yo'q", "Әзірге сөйлесулер жоқ", "Пока нет диалогов", "No chats yet"], ["Xabar yozing...", "Хабар жазыңыз...", "Напишите сообщение...", "Write a message..."], ["Sinov rejimi: xabarlar hali maxfiy emas", "Сынақ режимі: хабарлар әзірге құпия емес", "Тестовый режим: сообщения пока не конфиденциальны", "Test mode: messages are not private yet"], ["Reyting va Direct tez orada ishga tushadi", "Рейтинг пен Директ жақында іске қосылады", "Рейтинг и Директ скоро заработают", "Leaderboard and Direct are coming soon"], ["Yaratuvchi bilan bog'lanish", "Жасаушымен байланысу", "Связь с создателем", "Contact the creator"], ["To'liq ism", "Толық аты-жөні", "Полное имя", "Full name"], ["Jupiter", "Юпитер", "Юпитер", "Jupiter"], ["Saturn", "Сатурн", "Сатурн", "Saturn"], ["Neptune", "Нептун", "Нептун", "Neptune"], ["Earth", "Жер", "Земля", "Earth"], ["Everest", "Эверест", "Эверест", "Everest"], ["Elbrus", "Эльбрус", "Эльбрус", "Elbrus"], ["Mont Blanc", "Монблан", "Монблан", "Mont Blanc"], ["Samarkand", "Самарқанд", "Самарканд", "Samarkand"], ["Bukhara", "Бұхара", "Бухара", "Bukhara"], ["Tashkent", "Ташкент", "Ташкент", "Tashkent"], ["Khiva", "Хиуа", "Хива", "Khiva"], ["Navoi", "Науаи", "Навои", "Navoi"], ["Babur", "Бабыр", "Бабур", "Babur"], ["Beruni", "Бируни", "Бируни", "Beruni"], ["Ibn Sina", "Ибн Сина", "Ибн Сина", "Ibn Sina"], ["Gold", "Алтын", "Золото", "Gold"], ["Silver", "Күміс", "Серебро", "Silver"], ["Aluminium", "Алюминий", "Алюминий", "Aluminium"], ["Argon", "Аргон", "Аргон", "Argon"], ["Event horizon", "Оқиғалар көкжиегі", "Горизонт событий", "Event horizon"], ["Corona", "Тәж", "Корона", "Corona"], ["Nebula", "Тұмандық", "Туманность", "Nebula"], ["Pulsar", "Пульсар", "Пульсар", "Pulsar"], ["Foydalanuvchilarni qidirish", "Пайдаланушыларды іздеу", "Поиск пользователей", "Search users"], ["Hisobdan chiqish", "Профильді жабу", "Закрыть профиль", "Close profile"], ["Akkauntni almashtirish", "Аккаунтты ауыстыру", "Сменить аккаунт", "Switch account"], ["Obunalar", "Жазылымдар", "Подписки", "Following"], ["Aloqa", "Байланыс", "Контакты", "Contact"], ["Sizga obuna bo'lganlar", "Сізге жазылғандар", "Ваши подписчики", "Your followers"], ["Siz obuna bo'lganlar", "Сіз жазылғандар", "Ваши подписки", "People you follow"], ["Hali hech kim yo'q", "Әзірге ешкім жоқ", "Пока никого нет", "Nobody yet"], ["Quasar Claude yordamida yaratilgan", "Quasar Claude көмегімен жасалған", "Quasar создан с помощью Claude", "Quasar was built with Claude"], ["Shaxsiy bot yoki sayt yaratmoqchimisiz? Claude AI yordamchisi g'oya topish, kod yozish va xatolarni tuzatishda yordam beradi. Ilovani yuklab oling.", "Жеке бот немесе сайт жасағыңыз келе ме? Claude AI идея табуға, код жазуға және қателерді түзетуге көмектеседі. Қолданбаны жүктеп алыңыз.", "Хотите создать свой бот или сайт? Claude AI помогает придумывать идеи, писать код и исправлять ошибки. Скачайте приложение.", "Want to build your own bot or website? Claude AI helps with ideas, writing code and fixing bugs. Download the app."], ["Qidirilmoqda...", "Ізделуде...", "Идёт поиск...", "Searching..."], ["Yuklanmoqda...", "Жүктелуде...", "Загрузка...", "Loading..."], ["To'liq o'qish", "Толық оқу", "Читать полностью", "Read full article"], ["Maqola ochilmadi 😕", "Мақала ашылмады 😕", "Не удалось открыть статью 😕", "Could not open the article 😕"]];
+var LI={uz:0,kk:1,ru:2,en:3},LANG=LS.g("lang","uz"),MAP=Object.create(null),ALT={};
+if(!(LANG in LI))LANG="uz";
+T.forEach(function(r){MAP[r[0]]=r});
+var CM={"Toshkent":"geo","Amir Temur":"hist","Samarqand":"geo","Alisher Navoiy":"lit","Quyosh":"sci"};
+function mk(c,e,g,t,x){var L={uz:[t,x]},r=MAP[t],q=MAP[x];["kk","ru","en"].forEach(function(l,i){L[l]=[r?r[i+1]:t,q?q[i+1]:x]});return{c:c,e:e,g:g,L:L}}
+var D0=DB.slice();DB.length=0;
+D0.forEach(function(a){DB.push(mk(CM[a.t],a.e,a.g,a.t,a.x))});
+[["sci", "🌙", "g2", "Oy", "Oy — Yerning yagona tabiiy yo'ldoshi. U Yerdan taxminan 384 000 km uzoqlikda joylashgan va okean suvlarining ko'tarilishi hamda pasayishiga ta'sir qiladi."], ["hist", "🐪", "g3", "Buyuk ipak yo'li", "Buyuk ipak yo'li — Sharq va G'arbni bog'lagan qadimiy savdo yo'llari tizimi. Samarqand va Buxoro uning muhim shaharlari bo'lgan."], ["lit", "📖", "g4", "Abdulla Qodiriy", "Abdulla Qodiriy (1894–1938) — o'zbek romanchiligining asoschisi. «O'tkan kunlar» romani uning mashhur asaridir."]].forEach(function(x){DB.push(mk.apply(null,x))});
+function trn(s){var t=s.trim(),r=MAP[t],i=LI[LANG];if(r)return s.replace(t,function(){return r[i]});
+var m=/^([^\p{L}]*)(.*)$/u.exec(t);if(m&&m[1]&&(r=MAP[m[2]]))return s.replace(m[2],function(){return r[i]});return s}
+function f(n){var p=n.parentNode;if(p&&(p.nodeName==="SCRIPT"||p.nodeName==="STYLE"||(p.closest&&p.closest("[data-nt]"))))return;var o=n._o===undefined?n.nodeValue:n._o;n._o=o;var v=trn(o);if(v!==n.nodeValue)n.nodeValue=v}
+function ph(e){var o=e._ph||(e._ph=e.getAttribute("placeholder"));e.setAttribute("placeholder",trn(o))}
+function tw(r){if(r.nodeType===3){f(r);return}if(r.nodeType!==1)return;
+var w=document.createTreeWalker(r,4),n;while(n=w.nextNode())f(n);
+if(r.matches&&r.matches("[placeholder]"))ph(r);r.querySelectorAll("[placeholder]").forEach(ph)}
+new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(tw)})}).observe(document.body,{childList:true,subtree:true});
+function setLang(l){LANG=l;LS.s("lang",l);document.documentElement.lang=l;tw(document.body);
+document.querySelectorAll(".lg:not(.ag)").forEach(function(b){b.classList.toggle("on",b.dataset.l===l)});setALang(l)}
+[["uz","🇺🇿 UZ"],["kk","🇰🇿 KZ"],["ru","🇷🇺 RU"],["en","🇬🇧 EN"]].forEach(function(l){
+["lg1","lg2"].forEach(function(id){var b=document.createElement("button");b.className="lg";b.dataset.l=l[0];b.textContent=l[1];b.onclick=function(){setLang(l[0])};$(id).appendChild(b)})});
+setLang(LANG);
+var ss=LS.g("sess",""),A0=accs();if(ss&&A0[ss])enter(A0[ss]);
+var TG=window.Telegram&&Telegram.WebApp;
+if(TG){try{TG.ready();TG.expand();TG.setHeaderColor("#02060a");TG.setBackgroundColor("#02060a")}catch(e){}
+var tu=TG.initDataUnsafe&&TG.initDataUnsafe.user;if(tu&&tu.username&&$("nm")&&!$("nm").value)$("nm").value=tu.username.slice(0,20)}
+</script>
+</body>
+</html>
