@@ -1092,6 +1092,8 @@ gc.style.display="";gc.disabled=true;
 fetch(WORKER+"/check",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({initData:tg.initData})})
 .then(function(r){return r.json()}).then(function(d){gc.disabled=false;
 if(d.ok){g.style.display="none";return}
+if(d.error==="auth"){show("Bot tokeni mos kelmadi","Worker'dagi token shu botniki emas yoki eskirgan.");return}
+if(d.errs&&d.errs.length){show("Kanalni tekshirib bo'lmadi",d.errs.join(" | "));return}
 if(d.missing){show("Kanallarga obuna bo'ling","Davom etish uchun quyidagi kanallarga obuna bo'ling, so'ng «Tekshirish» ni bosing.");d.missing.forEach(function(i){btn("📢 "+CH[i][0],CH[i][1])});return}
 show("Tekshirib bo'lmadi","Birozdan keyin qayta urinib ko'ring.")})
 .catch(function(){gc.disabled=false;show("Tekshirib bo'lmadi","Internetni tekshirib, qayta urinib ko'ring.")})}
