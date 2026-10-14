@@ -408,17 +408,26 @@ function rnd(){wrand(ALANG).then(rcard).catch(function(){rndS()})}
 $("sp").onclick=function(){this.classList.toggle("open")};
 var views=+LS.g("views",0);
 function seen(){views++;LS.s("views",views);bump();$("st1").textContent=views}
-function cardH(img,t,x,u){return'<div class="card rnd" style="margin-top:14px">'+img+'<div data-nt="1"><h2>'+esc(t)+'</h2><p>'+esc(x)+'</p></div>'+(u?'<button class="btn" id="full">To\'liq o\'qish</button>':'')+'<button class="btn g" id="bk" style="margin-top:10px">← Orqaga</button></div>'}
+function cardH(img,t,x,u){return'<div class="card rnd" style="margin-top:14px">'+img+'<div data-nt="1"><h2>'+esc(t)+'</h2><p>'+esc(x)+'</p></div>'+(u?'<button class="btn" id="full">To\'liq o\'qish</button><button class="btn g" id="trb" style="margin-top:10px">🌐 Tarjima</button>':'')+'<button class="btn g" id="bk" style="margin-top:10px">← Orqaga</button></div>'}
+function trans(){var b=$("trb"),box=document.querySelector("#res .rnd [data-nt]");
+if(box.dataset.tr){box.innerHTML=box.dataset.orig;delete box.dataset.tr;b.textContent="🌐 Tarjima";return}
+b.disabled=true;b.textContent="Tarjima qilinmoqda...";
+var els=[].slice.call(box.querySelectorAll("h2,h3,p")),orig=box.innerHTML,i=0,fail=0;
+function tr1(t){return fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl="+LANG+"&dt=t&q="+encodeURIComponent(t)).then(function(r){return r.json()}).then(function(d){return d[0].map(function(x){return x[0]}).join("")})}
+function one(t){if(!t.trim())return Promise.resolve(t);var parts=[],cur="";t.split(/(?<=[.!?])\s+/).forEach(function(x){if((cur+" "+x).length>1200&&cur){parts.push(cur);cur=x}else cur=cur?cur+" "+x:x});if(cur)parts.push(cur);
+return Promise.all(parts.map(tr1)).then(function(a){return a.join(" ")})}
+function work(){if(i>=els.length)return Promise.resolve();var k=i++;return one(els[k].textContent).then(function(r){els[k].textContent=r}).catch(function(){fail++}).then(work)}
+Promise.all([work(),work(),work(),work()]).then(function(){b.disabled=false;if(fail>=els.length){b.textContent="Tarjima ishlamadi, qayta urinib ko'ring";return}box.dataset.orig=orig;box.dataset.tr=1;b.textContent="↩ Asl matn"})}
 function loadFull(t){var b=$("full");b.disabled=true;b.textContent="Yuklanmoqda...";
 wapi(ALANG,"action=query&prop=extracts&explaintext=1&exsectionformat=wiki&redirects=1&titles="+encodeURIComponent(t)).then(function(d){
 var P=d.query&&d.query.pages,p=P&&P[Object.keys(P)[0]],x=(p&&p.extract)||"";if(!x)throw 0;
 var h=x.split("\n").map(function(l){l=l.trim();if(!l)return"";var m=l.match(/^(=+)\s*(.+?)\s*=+$/);return m?'<h3 style="display:block;margin:16px 0 4px">'+esc(m[2])+'</h3>':'<p>'+esc(l)+'</p>'}).join("");
-var box=document.querySelector("#res .rnd [data-nt]");box.innerHTML='<h2>'+esc(t)+'</h2>'+h;b.remove()}).catch(function(){b.disabled=false;b.textContent="Qayta urinib ko'ring"})}
+var box=document.querySelector("#res .rnd [data-nt]");box.innerHTML='<h2>'+esc(t)+'</h2>'+h;delete box.dataset.tr;if($("trb"))$("trb").textContent="🌐 Tarjima";b.remove()}).catch(function(){b.disabled=false;b.textContent="Qayta urinib ko'ring"})}
 function showS(i){var a=DB[i],A=art(a);$("res").innerHTML=cardH('<div class="img '+a.g+'">'+a.e+'</div>',A[0],A[1],"");$("bk").onclick=search}
 function showT(t,fb){
 seen();tab("search");$("res").innerHTML='<div class="msg">Yuklanmoqda...</div>';
 wsum(ALANG,t).then(function(a){var u=a.content_urls&&a.content_urls.mobile?a.content_urls.mobile.page:"";
-$("res").innerHTML=cardH(a.thumbnail?'<img src="'+esc(a.thumbnail.source)+'" alt="">':'<div class="img g2">🌌</div>',a.title,a.extract||"",u);$("bk").onclick=search;if($("full"))$("full").onclick=function(){loadFull(a.title)}})
+$("res").innerHTML=cardH(a.thumbnail?'<img src="'+esc(a.thumbnail.source)+'" alt="">':'<div class="img g2">🌌</div>',a.title,a.extract||"",u);$("bk").onclick=search;if($("full"))$("full").onclick=function(){loadFull(a.title)};if($("trb"))$("trb").onclick=trans})
 .catch(function(){if(fb!==undefined)showS(fb);else $("res").innerHTML='<div class="msg">Maqola ochilmadi 😕</div>'})}
 function show(i){showT(art(DB[i])[0],i)}
 document.querySelectorAll(".row[data-a]").forEach(function(r){r.onclick=function(){show(+r.dataset.a)}});
