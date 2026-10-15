@@ -143,6 +143,7 @@ body{background:radial-gradient(ellipse at 30% 20%,var(--g1,#06241a) 0%,#02060a 
 #p-set .card:not(.set)>div:first-child>b{display:block}
 #p-set .card:not(.set)>div:first-child>span{display:block;color:var(--sub);font-size:.9em;margin-top:2px}
 nav button[data-p="quiz"]{display:none!important}
+.mdb{border:1px solid var(--bd);border-radius:14px;padding:9px 14px;background:var(--card);color:var(--tx);font:inherit;font-size:.9em}.mdb.on{border-color:var(--pr);box-shadow:0 0 12px var(--pr);font-weight:700}#sf{display:none}
 </style>
 </head>
 <body>
@@ -191,6 +192,8 @@ nav button[data-p="quiz"]{display:none!important}
 <section class="page" id="p-search">
 <h1>🔎 Qidiruv</h1>
 <div class="sbar"><input id="q" type="search" placeholder="Maqola nomini yozing..." autocomplete="off"><button class="btn" id="go">Izla</button></div>
+<div style="display:flex;gap:8px;margin-top:10px"><button class="mdb on" data-m="w">📚 Vikipediya</button><button class="mdb" data-m="s">🎓 Ilmiy maqolalar</button></div>
+<div id="sf" style="display:none;margin-top:10px;gap:8px;flex-wrap:wrap"><select id="sfy" style="background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:8px;font:inherit;font-size:.9em"><option value="">Barcha yillar</option><option value="2024">2024 dan</option><option value="2020">2020 dan</option><option value="2015">2015 dan</option><option value="2010">2010 dan</option><option value="2000">2000 dan</option></select><select id="sfs" style="background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:8px;font:inherit;font-size:.9em"><option value="">Mos kelishi</option><option value="publication_date:desc">Eng yangi</option><option value="cited_by_count:desc">Ko'p keltirilgan</option></select><label style="background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:8px;font:inherit;font-size:.9em;display:flex;align-items:center;gap:6px"><input type="checkbox" id="sfo">🔓 Faqat bepul</label></div>
 <div class="msg" style="text-align:left;padding:14px 0 0">Maqola tili:</div><div class="langs" id="lg3" style="justify-content:flex-start;margin:6px 0 0"></div><div class="chips" id="cts"></div><div id="res"></div>
 </section>
 
@@ -447,7 +450,30 @@ r.forEach(function(i){var a=DB[i],A=art(a),e=document.createElement("div");e.cla
 e.innerHTML='<div class="th '+a.g+'">'+a.e+'</div><div data-nt="1"><b>'+esc(A[0])+'</b><span>'+esc(A[1].slice(0,70))+'...</span></div>';
 e.onclick=function(){show(i)};el.appendChild(e)})}
 var sreq=0;
+var smd="w";
+function sci(){var q=$("q").value.trim(),id=++sreq,r=$("res");
+if(!q){r.innerHTML='<div class="msg">Qidiruv so\'zini yozing</div>';return}
+r.innerHTML='<div class="msg">Qidirilmoqda...</div>';
+var f=[],y=$("sfy").value;if(y)f.push("from_publication_date:"+y+"-01-01");if($("sfo").checked)f.push("is_oa:true");var so=$("sfs").value;
+var u="https://api.openalex.org/works?search="+encodeURIComponent(q)+"&per-page=15&select=id,title,publication_year,cited_by_count,doi,authorships,primary_location,open_access,abstract_inverted_index"+(f.length?"&filter="+f.join(","):"")+(so?"&sort="+so:"");
+var gs="https://scholar.google.com/scholar?q="+encodeURIComponent(q)+(y?"&as_ylo="+y:"")+"&hl="+LANG;
+var head='<a class="btn g lk" target="_blank" rel="noopener" href="'+gs+'" style="display:block;text-align:center;margin:12px 0">🎓 Google Scholar\'da ochish</a>';
+fetch(u).then(function(x){return x.json()}).then(function(d){if(id!==sreq)return;var L=d.results||[];
+if(!L.length){r.innerHTML=head+'<div class="msg">Hech narsa topilmadi 😕</div>';return}
+r.innerHTML=head;
+L.forEach(function(w){var ab="",ix=w.abstract_inverted_index;if(ix){var a=[];Object.keys(ix).forEach(function(k){ix[k].forEach(function(p){a[p]=k})});ab=a.join(" ").slice(0,320)}
+var au=(w.authorships||[]).slice(0,3).map(function(x){return x.author.display_name}).join(", ");
+var ve=w.primary_location&&w.primary_location.source?w.primary_location.source.display_name:"";
+var lk=(w.open_access&&w.open_access.oa_url)||w.doi||"";
+var e=document.createElement("div");e.className="card";e.setAttribute("data-nt","1");
+e.innerHTML='<b>'+esc(w.title||"")+'</b><div style="color:var(--sub);font-size:.85em;margin:4px 0">'+esc(au)+(w.publication_year?' · '+w.publication_year:'')+(ve?' · '+esc(ve):'')+' · 📈 '+(w.cited_by_count||0)+'</div>'+(ab?'<p style="font-size:.9em;line-height:1.5;margin:6px 0">'+esc(ab)+'…</p>':'')+(lk?'<a class="btn g lk" target="_blank" rel="noopener" href="'+esc(lk)+'">'+(w.open_access&&w.open_access.is_oa?'🔓 Bepul o\'qish':'🔗 Manba')+'</a>':'');
+r.appendChild(e)})}).catch(function(){if(id===sreq)r.innerHTML=head+'<div class="msg">Ilmiy bazaga ulanib bo\'lmadi 😕</div>'})}
+document.querySelectorAll(".mdb").forEach(function(b){b.onclick=function(){smd=b.dataset.m;document.querySelectorAll(".mdb").forEach(function(x){x.classList.toggle("on",x===b)});
+var sc=smd==="s";$("sf").style.display=sc?"flex":"none";$("lg3").style.display=sc?"none":"";$("lg3").previousElementSibling.style.display=sc?"none":"";$("cts").style.display=sc?"none":"";
+$("q").placeholder=sc?"Ilmiy mavzu yoki kalit so'z...":"Maqola nomini yozing...";$("res").innerHTML="";if(sc&&$("q").value.trim())search()}});
+["sfy","sfs","sfo"].forEach(function(i){$(i).onchange=function(){search()}});
 function search(){
+if(smd==="s"){sci();return}
 var q=$("q").value.trim(),id=++sreq;
 if(!q&&!cat){lsearch();return}
 $("res").innerHTML='<div class="msg">Qidirilmoqda...</div>';
