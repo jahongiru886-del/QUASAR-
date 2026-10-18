@@ -209,10 +209,10 @@ nav button[data-p="quiz"]{display:none!important}
 <section class="page" id="p-search">
 <h1>🔎 Qidiruv</h1>
 <div class="sbar"><input id="q" type="search" placeholder="Maqola nomini yozing..." autocomplete="off"><button class="btn" id="go">Izla</button></div>
-<div style="display:flex;gap:8px;margin-top:10px"><button class="mdb on" data-m="w">📚 Vikipediya</button><button class="mdb" data-m="s">🎓 Ilmiy maqolalar</button></div>
+<div style="display:flex;gap:8px;margin-top:10px"><button class="mdb on" data-m="w">📚 Vikipediya</button><button class="mdb" data-m="s">🎓 Ilmiy maqolalar</button><button class="mdb" data-m="d">📰 Darakchi</button></div>
 <div id="shw"></div>
 <div id="sf" style="display:none;margin-top:10px;gap:8px;flex-wrap:wrap"><select id="sfsrc" style="background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:8px;font:inherit;font-size:.9em"><option value="oa">OpenAlex</option><option value="cr">Crossref</option><option value="zn">Zenodo</option><option value="s2">Semantic Scholar</option></select><select id="sfl" style="background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:8px;font:inherit;font-size:.9em"><option value="">Barcha tillar</option><option value="uz">O'zbekcha</option><option value="kk">Qozoqcha</option><option value="ru">Ruscha</option><option value="en">Inglizcha</option><option value="tr">Turkcha</option><option value="de">Nemischa</option><option value="fr">Fransuzcha</option><option value="es">Ispancha</option><option value="ar">Arabcha</option><option value="zh">Xitoycha</option></select><select id="sfy" style="background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:8px;font:inherit;font-size:.9em"><option value="">Barcha yillar</option><option value="2024">2024 dan</option><option value="2020">2020 dan</option><option value="2015">2015 dan</option><option value="2010">2010 dan</option><option value="2000">2000 dan</option></select><select id="sfs" style="background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:8px;font:inherit;font-size:.9em"><option value="">Mos kelishi</option><option value="publication_date:desc">Eng yangi</option><option value="cited_by_count:desc">Ko'p keltirilgan</option></select><label style="background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:8px;font:inherit;font-size:.9em;display:flex;align-items:center;gap:6px"><input type="checkbox" id="sfo">🔓 Faqat bepul</label></div>
-<div class="msg" style="text-align:left;padding:14px 0 0">Maqola tili:</div><div class="langs" id="lg3" style="justify-content:flex-start;margin:6px 0 0"></div><div class="chips" id="cts"></div><div id="res"></div>
+<div class="msg" style="text-align:left;padding:14px 0 0">Maqola tili:</div><div class="langs" id="lg3" style="justify-content:flex-start;margin:6px 0 0"></div><div class="chips" id="cts"></div><div id="dkc" style="display:none"><div class="msg" style="text-align:left;padding:14px 0 0">Yangiliklar tili:</div><div class="langs" id="dkl" style="justify-content:flex-start;margin:6px 0 0"></div><div class="chips" id="dkcats"></div></div><div id="res"></div>
 </section>
 
 <section class="page" id="p-quiz"><h1>🧠 Viktorina</h1><div id="qz"></div></section>
@@ -505,6 +505,7 @@ var sc=smd==="s";$("sf").style.display=sc?"flex":"none";$("lg3").style.display=s
 $("q").placeholder=sc?"Ilmiy mavzu yoki kalit so'z...":"Maqola nomini yozing...";$("res").innerHTML="";if(sc&&$("q").value.trim())search()}});
 ["sfy","sfs","sfo","sfsrc","sfl"].forEach(function(i){$(i).onchange=function(){search()}});
 function search(){
+if(smd==="d"){dkRender();return}
 if(smd==="s"){sci();return}
 var q=$("q").value.trim(),id=++sreq;
 if(!q&&!cat){lsearch();return}
@@ -528,6 +529,69 @@ document.querySelectorAll(".ag").forEach(function(b){b.classList.toggle("on",b.d
 $("go").onclick=function(){hadd($("q").value,smd);search()};
 $("q").addEventListener("keydown",function(e){if(e.key==="Enter"){hadd($("q").value,smd);search()}});
 
+/* ---- DARAKCHI.UZ (yangiliklar) ---- */
+var DK={cache:{},cat:"",lang:LS.g("dklang","oz"),items:[],err:0};
+var DKLG=[["oz","🇺🇿 Lotin"],["uz","🇺🇿 Кирил"],["ru","🇷🇺 RU"],["en","🇬🇧 EN"]];
+var DKTTL=300000;
+function dkGet(p){
+var u="https://darakchi.uz/"+p+"/yandex-rss",px=[u,"https://api.allorigins.win/raw?url="+encodeURIComponent(u),"https://corsproxy.io/?"+encodeURIComponent(u)],i=0;
+function nx(){if(i>=px.length)return Promise.reject(0);
+return fetch(px[i++]).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){if(t.indexOf("<item>")<0)throw 0;return t}).catch(nx)}
+return nx()}
+function dkParse(t){
+var x=new DOMParser().parseFromString(t,"text/xml"),o=[];
+[].forEach.call(x.getElementsByTagName("item"),function(n){
+function g(k){var e=n.getElementsByTagName(k)[0];return e?e.textContent.trim():""}
+var en=n.getElementsByTagName("enclosure")[0];
+o.push({t:g("title"),u:g("link"),d:Date.parse(g("pubDate"))||0,x:g("description"),c:g("category"),f:g("yandex:full-text"),i:en?en.getAttribute("url"):""})});
+return o}
+function dkLoad(l){
+var c=DK.cache[l];if(c&&Date.now()-c.t<DKTTL)return Promise.resolve(c.items);
+return dkGet(l).catch(function(){if(l!=="uz")return dkGet("uz");throw 0}).then(function(t){var it=dkParse(t);if(!it.length)throw 0;DK.cache[l]={t:Date.now(),items:it};return it})}
+function l2c(s){s=String(s||"").toLowerCase().replace(/[ʻʼ’`´‘]/g,"'");
+[["o'","ў"],["g'","ғ"],["sh","ш"],["ch","ч"],["yo","ё"],["yu","ю"],["ya","я"],["ye","е"],["ng","нг"]].forEach(function(p){s=s.split(p[0]).join(p[1])});
+var M={a:"а",b:"б",d:"д",e:"е",f:"ф",g:"г",h:"ҳ",i:"и",j:"ж",k:"к",l:"л",m:"м",n:"н",o:"о",p:"п",q:"қ",r:"р",s:"с",t:"т",u:"у",v:"в",x:"х",y:"й",z:"з"};
+return s.replace(/[a-z]/g,function(c){return M[c]||c})}
+function dkChips(){
+var w=$("dkcats");if(!w)return;w.innerHTML="";
+var cs=[""];DK.items.forEach(function(a){if(a.c&&cs.indexOf(a.c)<0)cs.push(a.c)});
+cs.forEach(function(c){var e=document.createElement("div");e.className="chip"+(c===DK.cat?" on":"");e.textContent=c||"Hammasi";
+e.onclick=function(){DK.cat=c;dkChips();dkList()};w.appendChild(e)})}
+function dkList(){
+var q=$("q").value.trim().toLowerCase(),q2=q?l2c(q):"",r=$("res"),L=DK.items.filter(function(a){
+if(DK.cat&&a.c!==DK.cat)return false;if(!q)return true;
+var h=(a.t+" "+a.x+" "+a.f).toLowerCase();return h.indexOf(q)>-1||h.indexOf(q2)>-1});
+var site='<a class="btn g lk" target="_blank" rel="noopener" href="https://darakchi.uz/'+(DK.lang==="oz"?"uz":DK.lang)+'/search'+(q?'?q='+encodeURIComponent($("q").value.trim()):'')+'">🔎 darakchi.uz saytida qidirish</a>';
+r.innerHTML="";
+if(!L.length){r.innerHTML='<div class="msg">Hech narsa topilmadi 😕</div>'+site;return}
+L.forEach(function(a){var e=document.createElement("div");e.className="card row";
+e.innerHTML=(a.i?'<img class="th" src="'+esc(a.i)+'" alt="" loading="lazy">':'<div class="th g2">📰</div>')+'<div data-nt="1"><b>'+esc(a.t)+'</b><span>'+esc((a.c?a.c+" · ":"")+vdate(a.d))+'</span></div>';
+e.onclick=function(){dkOpen(a)};r.appendChild(e)});
+r.insertAdjacentHTML("beforeend",site)}
+function dkRender(){
+var id=++sreq,r=$("res");r.innerHTML='<div class="msg">Yuklanmoqda...</div>';
+dkLoad(DK.lang).then(function(it){if(id!==sreq||smd!=="d")return;DK.items=it;if(DK.cat&&!it.some(function(a){return a.c===DK.cat}))DK.cat="";dkChips();dkList()})
+.catch(function(){if(id!==sreq)return;r.innerHTML='<div class="msg">Darakchi.uz ga ulanib bo\'lmadi 😕</div><button class="btn g" id="dkre">Qayta urinib ko\'ring</button>';$("dkre").onclick=dkRender})}
+function dkOpen(a){
+tab("search");
+$("res").innerHTML=cardH(a.i?'<img src="'+esc(a.i)+'" alt="">':'<div class="img g2">📰</div>',a.t,"","");
+var box=document.querySelector("#res .rnd [data-nt]"),ps=(a.f||a.x||"").split(/(?<=[.!?»”"])(?=[А-ЯЁЎҚҒҲA-Z“«])/),h='<h2>'+esc(a.t)+'</h2><p style="font-size:.85em">'+esc((a.c?a.c+" · ":"")+vdate(a.d))+'</p>',cur="";
+if(a.f){ps.forEach(function(x,i){cur+=(cur?" ":"")+x;if((i%3===2)||i===ps.length-1){h+='<p>'+esc(cur)+'</p>';cur=""}})}else h+='<p>'+esc(a.x)+'</p>';
+box.innerHTML=h;
+var bk=$("bk");
+bk.insertAdjacentHTML("beforebegin",(a.u?'<a class="btn lk" target="_blank" rel="noopener" href="'+esc(a.u)+'">🔗 Darakchi.uz da o\'qish</a>':'')+
+'<button class="btn g" id="trb" style="margin-top:10px">🌐 Tarjima</button><button class="btn g" id="tru" style="margin-top:10px">🇺🇿 O\'zbekchaga</button>');
+$("trb").onclick=function(){trans("trb",LANG)};$("tru").onclick=function(){trans("tru","uz")};
+if(LANG==="uz")$("trb").remove();
+bk.onclick=function(){if(DK.items.length){$("res").innerHTML="";dkChips();dkList()}else dkRender()};
+window.scrollTo(0,0)}
+DKLG.forEach(function(l){var b=document.createElement("button");b.className="lg"+(l[0]===DK.lang?" on":"");b.dataset.l=l[0];b.textContent=l[1];
+b.onclick=function(){DK.lang=l[0];LS.s("dklang",l[0]);DK.cat="";document.querySelectorAll("#dkl .lg").forEach(function(x){x.classList.toggle("on",x===b)});dkRender()};$("dkl").appendChild(b)});
+document.querySelectorAll(".mdb").forEach(function(b){b.addEventListener("click",function(){
+var d=smd==="d";$("dkc").style.display=d?"":"none";
+if(d){$("sf").style.display="none";$("lg3").style.display="none";$("lg3").previousElementSibling.style.display="none";$("cts").style.display="none";$("q").placeholder="Yangilik izlang...";dkRender()}})});
+$("q").addEventListener("input",function(){if(smd==="d"&&DK.items.length)dkList()});
+
 /* ---- QIDIRUV TARIXI ---- */
 function hget(){return me().sh||[]}
 function hadd(q,m){q=String(q||"").trim().slice(0,80);if(!q)return;var A=accs(),a=A[cur];if(!a)return;
@@ -542,7 +606,7 @@ hget().forEach(function(x,i){if(!v||x.q.toLowerCase().indexOf(v)>-1)L.push({x:x,
 L=L.slice(0,8);
 if(!L.length){w.innerHTML="";return}
 w.innerHTML='<div class="hh"><span>🕘 Qidiruv tarixi</span><button class="hc" data-hc="1">Tozalash</button></div><div class="hl">'+
-L.map(function(o){return'<div class="chip" data-hi="'+o.i+'"><span data-nt="1">'+(o.x.m==="s"?"🎓 ":"")+esc(o.x.q)+'</span><b class="hx" data-hx="'+o.i+'">×</b></div>'}).join("")+'</div>'}
+L.map(function(o){return'<div class="chip" data-hi="'+o.i+'"><span data-nt="1">'+(o.x.m==="s"?"🎓 ":o.x.m==="d"?"📰 ":"")+esc(o.x.q)+'</span><b class="hx" data-hx="'+o.i+'">×</b></div>'}).join("")+'</div>'}
 function hrun(i){var x=hget()[i];if(!x)return;var q=$("q");
 if(smd!==x.m){q.value="";document.querySelector('.mdb[data-m="'+x.m+'"]').click()}
 q.value=x.q;hadd(x.q,x.m);search()}
