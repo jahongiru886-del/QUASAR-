@@ -533,12 +533,15 @@ $("q").addEventListener("keydown",function(e){if(e.key==="Enter"){hadd($("q").va
 var DK={cache:{},cat:"",lang:LS.g("dklang","oz"),items:[],err:0};
 var DKLG=[["oz","🇺🇿 Lotin"],["uz","🇺🇿 Кирил"],["ru","🇷🇺 RU"],["en","🇬🇧 EN"]];
 var DKTTL=300000;
+var DK_PROXY="https://darakchi.nebulacs44.workers.dev";/* Cloudflare Worker manzilini shu yerga yozing, masalan "https://darakchi.sizning.workers.dev" */
 function dkGet(p){
-var u="https://darakchi.uz/"+p+"/yandex-rss",px=[u,"https://api.allorigins.win/raw?url="+encodeURIComponent(u),"https://corsproxy.io/?"+encodeURIComponent(u)],i=0;
-function nx(){if(i>=px.length)return Promise.reject(0);
-return fetch(px[i++]).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){if(t.indexOf("<item>")<0)throw 0;return t}).catch(nx)}
-return nx()}
+var u="https://darakchi.uz/"+p+"/yandex-rss",E=encodeURIComponent,
+px=(DK_PROXY?[DK_PROXY+"?l="+p]:[]).concat([u,"https://api.rss2json.com/v1/api.json?rss_url="+E(u),"https://api.allorigins.win/raw?url="+E(u),"https://corsproxy.io/?"+E(u),"https://api.codetabs.com/v1/proxy?quest="+E(u),"https://thingproxy.freeboard.io/fetch/"+u]);
+function one(x){return new Promise(function(ok,no){var c=window.AbortController?new AbortController():null,tm=setTimeout(function(){if(c)c.abort();no(0)},7000);
+fetch(x,c?{signal:c.signal}:{}).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){clearTimeout(tm);if(t.indexOf("<item>")<0&&t.indexOf("\"items\"")<0)throw 0;ok(t)}).catch(function(){clearTimeout(tm);no(0)})})}
+return new Promise(function(ok,no){var n=px.length,done=0;px.forEach(function(x){one(x).then(function(t){if(!done){done=1;ok(t)}},function(){if(--n===0&&!done)no(0)})})})}
 function dkParse(t){
+if(t.trim().charAt(0)==="{"){var j=JSON.parse(t);return(j.items||[]).map(function(n){return{t:n.title||"",u:n.link||"",d:Date.parse((n.pubDate||"").replace(" ","T")+"Z")||0,x:n.description||"",c:(n.categories&&n.categories[0])||"",f:n.content||"",i:(n.enclosure&&n.enclosure.link)||n.thumbnail||""}})}
 var x=new DOMParser().parseFromString(t,"text/xml"),o=[];
 [].forEach.call(x.getElementsByTagName("item"),function(n){
 function g(k){var e=n.getElementsByTagName(k)[0];return e?e.textContent.trim():""}
