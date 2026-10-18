@@ -575,18 +575,44 @@ function dkRender(){
 var id=++sreq,r=$("res");r.innerHTML='<div class="msg">Yuklanmoqda...</div>';
 dkLoad(DK.lang).then(function(it){if(id!==sreq||smd!=="d")return;DK.items=it;if(DK.cat&&!it.some(function(a){return a.c===DK.cat}))DK.cat="";dkChips();dkList()})
 .catch(function(){if(id!==sreq)return;r.innerHTML='<div class="msg">Darakchi.uz ga ulanib bo\'lmadi 😕</div><button class="btn g" id="dkre">Qayta urinib ko\'ring</button>';$("dkre").onclick=dkRender})}
+function dkRss(a){
+var ps=(a.f||a.x||"").split(/(?<=[.!?»”"])(?=[А-ЯЁЎҚҒҲA-Z“«])/),o=[],cur="";
+ps.forEach(function(x,i){cur+=(cur?" ":"")+x;if(i%3===2||i===ps.length-1){o.push({k:"p",t:cur});cur=""}});return o}
+function dkHtml(B){return B.map(function(b){return b.k==="h"?'<h3 style="display:block;margin:16px 0 4px">'+esc(b.t)+'</h3>':b.k==="i"?'<img src="'+esc(b.s)+'" alt="" loading="lazy" style="max-height:none;height:auto;object-fit:contain;margin:10px 0">':'<p>'+esc(b.t)+'</p>'}).join("")}
+function dkFull(t){
+var d=new DOMParser().parseFromString(t,"text/html"),R=d.querySelector("article")||d.querySelector("main")||d.body,B=[],I=[],len=0,seen={},stop=0;
+[].forEach.call(R.querySelectorAll("h1,h2,h3,p,img,blockquote"),function(n){
+if(stop||n.closest("header,footer,nav,aside,script,style,noscript,form,button"))return;
+var tg=n.tagName.toLowerCase();
+if(tg==="img"){var s=n.getAttribute("src")||n.getAttribute("data-src")||"",m=s.match(/_next\/image\?url=([^&]+)/);if(m)s=decodeURIComponent(m[1]);
+if(!/^https?:/.test(s)||/logo|earth|placeholder|icon|avatar|\.svg/i.test(s)||seen[s])return;seen[s]=1;var o={k:"i",s:s};B.push(o);I.push(o);return}
+var x=n.textContent.replace(/\s+/g," ").trim();if(x.length<2||tg==="h1")return;
+if(/ўхшаш|ухшаш|oxshash|похожи|related|читайте также|кўп ўқилган|сўнгги янгилик|latest news/i.test(x)&&x.length<60){stop=1;return}
+if(seen[x])return;seen[x]=1;
+if(tg==="p"||tg==="blockquote"){if(x.length<25&&!/[.!?»”"]$/.test(x))return;B.push({k:"p",t:x});len+=x.length}else B.push({k:"h",t:x})});
+[].forEach.call(d.querySelectorAll('script[type="application/ld+json"]'),function(s){try{(function w(o){if(!o||typeof o!=="object")return;
+if(typeof o.articleBody==="string"&&o.articleBody.length>len*1.05){var P=o.articleBody.split(/\n+/).map(function(z){return z.trim()}).filter(function(z){return z.length>1});
+if(P.length<3)P=dkRss({f:o.articleBody}).map(function(z){return z.t});B=I.slice(0,1).concat(P.map(function(z){return{k:"p",t:z}}));len=o.articleBody.length}
+for(var k in o)w(o[k])})(JSON.parse(s.textContent))}catch(e){}});
+return{b:B,len:len,img:I.length}}
 function dkOpen(a){
 tab("search");
 $("res").innerHTML=cardH(a.i?'<img src="'+esc(a.i)+'" alt="">':'<div class="img g2">📰</div>',a.t,"","");
-var box=document.querySelector("#res .rnd [data-nt]"),ps=(a.f||a.x||"").split(/(?<=[.!?»”"])(?=[А-ЯЁЎҚҒҲA-Z“«])/),h='<h2>'+esc(a.t)+'</h2><p style="font-size:.85em">'+esc((a.c?a.c+" · ":"")+vdate(a.d))+'</p>',cur="";
-if(a.f){ps.forEach(function(x,i){cur+=(cur?" ":"")+x;if((i%3===2)||i===ps.length-1){h+='<p>'+esc(cur)+'</p>';cur=""}})}else h+='<p>'+esc(a.x)+'</p>';
-box.innerHTML=h;
+var box=document.querySelector("#res .rnd [data-nt]"),head='<h2>'+esc(a.t)+'</h2><p style="font-size:.85em">'+esc((a.c?a.c+" · ":"")+vdate(a.d))+'</p>';
+box.innerHTML=head+dkHtml(dkRss(a))+'<p id="dkst" style="font-size:.8em">⏳ To\'liq matn yuklanmoqda...</p>';
 var bk=$("bk");
-bk.insertAdjacentHTML("beforebegin",(a.u?'<a class="btn lk" target="_blank" rel="noopener" href="'+esc(a.u)+'">🔗 Darakchi.uz da o\'qish</a>':'')+
-'<button class="btn g" id="trb" style="margin-top:10px">🌐 Tarjima</button><button class="btn g" id="tru" style="margin-top:10px">🇺🇿 O\'zbekchaga</button>');
+bk.insertAdjacentHTML("beforebegin",'<button class="btn g" id="trb" style="margin-top:10px">🌐 Tarjima</button><button class="btn g" id="tru" style="margin-top:10px">🇺🇿 O\'zbekchaga</button>');
 $("trb").onclick=function(){trans("trb",LANG)};$("tru").onclick=function(){trans("tru","uz")};
 if(LANG==="uz")$("trb").remove();
 bk.onclick=function(){if(DK.items.length){$("res").innerHTML="";dkChips();dkList()}else dkRender()};
+var m=(a.u||"").match(/darakchi\.uz\/(\w+)\/(\d+)/);
+function note(x){var s=$("dkst");if(s&&document.body.contains(box)){if(x)s.textContent=x;else s.remove()}}
+if(m&&DK_PROXY){fetch(DK_PROXY+"?a="+m[2]+"&l="+m[1]).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){
+if(t.indexOf("<item>")>-1){note("Worker yangilanmagan: to'liq matn uchun darakchi-proxy.js ni qayta joylang");return}
+var F=dkFull(t),rl=(a.f||a.x||"").length;
+if(!document.body.contains(box))return;
+if(F.len>=rl*.9&&(F.len>rl*1.05||F.img>0)){if(box.dataset.tr){note();return}box.innerHTML=head+dkHtml(F.b)}else note()
+}).catch(function(){note("Saytdan to'liq matn olinmadi, qisqa matn ko'rsatilmoqda")})}else note();
 window.scrollTo(0,0)}
 DKLG.forEach(function(l){var b=document.createElement("button");b.className="lg"+(l[0]===DK.lang?" on":"");b.dataset.l=l[0];b.textContent=l[1];
 b.onclick=function(){DK.lang=l[0];LS.s("dklang",l[0]);DK.cat="";document.querySelectorAll("#dkl .lg").forEach(function(x){x.classList.toggle("on",x===b)});dkRender()};$("dkl").appendChild(b)});
