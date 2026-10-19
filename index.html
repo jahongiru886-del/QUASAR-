@@ -1603,14 +1603,15 @@ document.querySelector("nav").addEventListener("click",function(e){var b=e.targe
 <div id="wp"><canvas></canvas><div id="wpt">QUASAR AI<small>OCHILMOQDA</small></div></div>
 <script>(function(){
 if(window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches)return;
-var wp=document.getElementById("wp"),cv=wp.querySelector("canvas"),x=cv.getContext("2d"),busy=0,N=360,S=[];
+var wp=document.getElementById("wp"),cv=wp.querySelector("canvas"),x=cv.getContext("2d"),busy=0,N=360,S=[],raf=0,kt=0;
+function end(){cancelAnimationFrame(raf);clearTimeout(kt);try{x.clearRect(0,0,cv.width,cv.height)}catch(e){}wp.className="";wp.style.display="";var P=document.getElementById("p-ai");if(P)P.classList.remove("wowin");busy=0}
 function snd(){try{if(!document.getElementById("snd").classList.contains("on"))return;var A=window.__wa||(window.__wa=new(window.AudioContext||window.webkitAudioContext)()),t=A.currentTime,o=A.createOscillator(),g=A.createGain(),f=A.createBiquadFilter();o.type="sawtooth";o.frequency.setValueAtTime(60,t);o.frequency.exponentialRampToValueAtTime(1400,t+1.05);f.type="lowpass";f.frequency.setValueAtTime(300,t);f.frequency.exponentialRampToValueAtTime(5000,t+1.05);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.22,t+.9);g.gain.exponentialRampToValueAtTime(.0001,t+1.15);o.connect(f);f.connect(g);g.connect(A.destination);o.start(t);o.stop(t+1.2);
 var b=A.createOscillator(),h=A.createGain();b.type="sine";b.frequency.setValueAtTime(140,t+1.05);b.frequency.exponentialRampToValueAtTime(35,t+1.8);h.gain.setValueAtTime(.0001,t+1.04);h.gain.exponentialRampToValueAtTime(.5,t+1.07);h.gain.exponentialRampToValueAtTime(.0001,t+1.9);b.connect(h);h.connect(A.destination);b.start(t+1.04);b.stop(t+1.95)}catch(e){}}
 function hap(){try{Telegram.WebApp.HapticFeedback.impactOccurred("medium")}catch(e){}try{navigator.vibrate&&navigator.vibrate([20,40,30,40,50,40,90])}catch(e){}
 setTimeout(function(){try{Telegram.WebApp.HapticFeedback.notificationOccurred("success")}catch(e){}try{navigator.vibrate&&navigator.vibrate(160)}catch(e){}},1050)}
 function run(){if(busy)return;busy=1;var W=cv.width=innerWidth*Math.min(devicePixelRatio||1,2),H=cv.height=innerHeight*Math.min(devicePixelRatio||1,2),cx=W/2,cy=H/2,D=Math.hypot(cx,cy),P=document.getElementById("p-ai"),k=W/innerWidth;
 S=[];for(var i=0;i<N;i++)S.push({a:Math.random()*6.2832,r:Math.random()*D*.6,s:.4+Math.random()*1.2,c:[[57,255,136],[0,229,255],[160,200,255],[255,255,255],[182,255,0]][i%5]});
-wp.className="on";void wp.offsetWidth;wp.classList.add("v");P.classList.add("wowin");snd();hap();
+wp.className="on";clearTimeout(kt);kt=setTimeout(end,2600);void wp.offsetWidth;wp.classList.add("v");P.classList.add("wowin");snd();hap();
 var t0=performance.now(),last=t0,T=1100,fired=0;
 (function f(n){var e=n-t0,dt=Math.min(n-last,40)/16.7;last=n;
 var v=e<T?Math.pow(e/T,2.2):Math.max(.05,1-(e-T)/700);
@@ -1625,8 +1626,9 @@ if(e>T-40){var q=(e-T+40)/900,fl=Math.max(0,1-q*3.2);if(q<1.2){
 if(fl>0){x.fillStyle="rgba(220,255,235,"+fl*.9+")";x.fillRect(0,0,W,H)}
 for(var j=0;j<3;j++){var rq=q-j*.09;if(rq<0||rq>1)continue;var rr=D*1.1*(1-Math.pow(1-rq,3));x.strokeStyle="rgba("+(j?"90,170,255":"57,255,136")+","+(1-rq)+")";x.lineWidth=(14-j*4)*(1-rq)*k+1;x.beginPath();x.arc(cx,cy,rr,0,6.2832);x.stroke()}}}
 if(e>1750)wp.classList.add("o");
-if(e<2300)requestAnimationFrame(f);else{wp.className="";P.classList.remove("wowin");busy=0}})(t0)}
-document.querySelector("nav").addEventListener("click",function(e){var b=e.target.closest("button");if(b&&b.dataset.p==="ai"&&!document.getElementById("p-ai").classList.contains("on"))run()},true);
+if(e<2300)raf=requestAnimationFrame(f);else end()})(t0)}
+document.querySelector("nav").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;if(b.dataset.p==="ai"){if(!document.getElementById("p-ai").classList.contains("on"))run()}else if(busy)end()},true);
+document.addEventListener("visibilitychange",function(){if(document.hidden&&busy)end()});addEventListener("pagehide",end);
 })();</script>
 
 </body>
