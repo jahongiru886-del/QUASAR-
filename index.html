@@ -254,8 +254,21 @@ nav button.on svg{animation:pop2 .6s var(--ease)}
 #fxl .row b{text-transform:none}#fxl .row .cc{text-transform:uppercase}
 
 h1{background:none!important;-webkit-text-fill-color:currentColor!important;color:var(--tx);animation:hin 1.2s var(--ease) backwards!important;text-shadow:0 0 34px rgba(255,255,255,.16)}
-.qlogo{width:.95em;height:.95em;vertical-align:-.14em;margin-right:.1em;display:inline-block;filter:drop-shadow(0 0 12px rgba(150,190,255,.45))}
+.qlogo{width:1.25em;height:1.25em;vertical-align:-.28em;margin-right:.1em;display:inline-block;filter:drop-shadow(0 0 12px rgba(150,190,255,.45))}
 #wf{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:none}
+
+#p-ai .aim,#p-ai input,#p-ai textarea,#p-ai select,#p-ai summary{text-transform:none}
+#p-ai .aim{max-width:88%;padding:12px 16px;margin:10px 0;border-radius:22px;white-space:pre-wrap;word-break:break-word;line-height:1.5;border:1px solid var(--hair);background:var(--glass);backdrop-filter:blur(18px);animation:rise .6s var(--ease) backwards}
+#p-ai .aiu{margin-left:auto;background:var(--tx);color:#05080a;border-bottom-right-radius:6px}
+#p-ai .aia{border-bottom-left-radius:6px}
+#p-ai .aia.ty::after{content:"●●●";letter-spacing:5px;font-size:.7em;animation:bl 1s infinite}
+@keyframes bl{50%{opacity:.25}}
+#p-ai select,#p-ai textarea{width:100%;box-sizing:border-box;padding:12px 14px;border-radius:18px;border:1px solid var(--hair);background:var(--glass);color:var(--tx);font:inherit;margin-top:8px}
+#p-ai select option{background:#0b0f12;color:#fff}
+#p-ai summary{cursor:pointer;font-family:var(--serif);font-size:1.1em}
+.aibar{position:sticky;bottom:calc(96px + env(safe-area-inset-bottom,0px));display:flex;gap:8px;margin-top:16px;z-index:5}
+.aibar .sbar{flex:1;margin:0}
+#aig{flex:0 0 52px;width:52px;height:52px;padding:0;border-radius:50%}
 </style>
 </head>
 <body>
@@ -324,6 +337,7 @@ h1{background:none!important;-webkit-text-fill-color:currentColor!important;colo
 </section>
 
 <section class="page" id="p-fx"><h1>💱 Kurs</h1><div class="card"><div class="sbar"><input id="fxa" type="text" inputmode="decimal" value="1" autocomplete="off"></div><div class="fxr"><select id="fxf"></select><button class="fxs" id="fxw" aria-label="swap">⇄</button><select id="fxt"></select></div><div class="fxo" id="fxo">…</div><div class="fxm" id="fxm">Kurs yuklanmoqda...</div></div><h3>1 birlik = soʻm <small id="fxd"></small></h3><div id="fxl"></div><p class="fxm">Bu oʻrtacha bozor kursi. Bank va ayirboshlash punktlarida kurs biroz farq qiladi.</p></section>
+<section class="page" id="p-ai"><h1>🤖 AI</h1><details class="card" id="aid"><summary>⚙️ AI sozlamalari</summary><div class="fxm" style="margin-top:10px">1. <a href="https://openrouter.ai/keys" id="aik1" style="color:var(--pr)">openrouter.ai/keys</a> da bepul kalit yarating va pastga qoʻying. Kalit faqat shu telefonda saqlanadi.</div><div class="sbar" style="margin-top:8px"><input id="aik" type="password" placeholder="sk-or-..." autocomplete="off"></div><select id="aim"></select><textarea id="aip" rows="4" placeholder="AI xarakteri"></textarea><div class="fxr"><button class="btn" id="aisv">Saqlash</button><button class="btn g" id="aic">Suhbatni tozalash</button></div><div class="fxm" id="ain"></div></details><div id="ail"></div><div class="aibar"><div class="sbar"><input id="aii" type="text" placeholder="Savol yozing..." autocomplete="off"></div><button class="btn" id="aig">➤</button></div></section>
 <section class="page" id="p-me">
 <div class="abar"><button class="btn g" id="xacc">← Hisobdan chiqish</button></div>
 <div class="card me">
@@ -353,6 +367,7 @@ h1{background:none!important;-webkit-text-fill-color:currentColor!important;colo
 <button class="on" data-p="home"><i><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></i>Bosh sahifa</button>
 <button data-p="search"><i><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></i>Qidiruv</button>
 <button data-p="fx"><i><svg viewBox="0 0 24 24"><path d="M4 8h14l-3-3M20 16H6l3 3"/></svg></i>Kurs</button>
+<button data-p="ai"><i><svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16v4M17 18h4"/></svg></i>AI</button>
 <button data-p="quiz"><i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7"/><circle cx="12" cy="17" r=".6"/></svg></i>Viktorina</button>
 <button data-p="top"><i><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H4v1a4 4 0 0 0 4 4M16 6h4v1a4 4 0 0 1-4 4M12 13v4M8 20h8M10 17h4"/></svg></i>Reyting</button>
 <button data-p="set"><i><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></i>Sozlamalar</button>
@@ -495,7 +510,7 @@ var DB=[
 ];
 
 /* ---- NAVIGATSIYA ---- */
-var ORD=["home","search","fx","quiz","top","set","me"],curT="home",prevT="home";
+var ORD=["home","search","fx","ai","quiz","top","set","me"],curT="home",prevT="home";
 function tab(p){
 var d=ORD.indexOf(p)>=ORD.indexOf(curT)?"iR":"iL";if(curT!=="me")prevT=curT;curT=p;document.body.classList.toggle("acc",p==="me");
 document.querySelectorAll(".page").forEach(function(e){e.classList.remove("on","iR","iL")});
@@ -1394,7 +1409,8 @@ grid.querySelectorAll(".bgc").forEach(function(b,i){b.classList.toggle("on",i===
 nb.forEach(function(b){b.querySelector("i").innerHTML=v===7?'<span style="font-size:22px;line-height:1">'+IC[b.dataset.p]+'</span>':keep[b.dataset.p]});
 fon.style.display=(v>=1&&v<=6)?"block":"none";vid.style.display=v===7?"block":"none";sky.style.display=(v===0||v===7)?"block":"none";
 if(v>=1&&v<=6)FON.set(v-1);else FON.stop();
-if(v===7){if(!vid.getAttribute("src"))setSrc();play()}else{vid.pause();vid.classList.remove("pl")}}
+if(v===7){if(!vid.getAttribute("src"))setSrc();play()}else{vid.pause();vid.classList.remove("pl")}
+if(window.WFset)WFset(v===8)}
 applyBg(LS.g("bg","0"),1);
 try{Telegram.WebApp.CloudStorage.getItem("bg",function(e,val){if(!e&&val!==""&&val!=null&&+val!==cur)applyBg(val)})}catch(e){}
 })();
@@ -1439,39 +1455,74 @@ $("fxa").oninput=draw;$("fxw").onclick=function(){var a=$("fxf").value;$("fxf").
 document.querySelector("nav").addEventListener("click",function(e){var b=e.target.closest("button");if(b&&b.dataset.p==="fx")load()});
 })();</script>
 <canvas id="wf"></canvas><script>(function(){
-var c=document.getElementById("wf"),gl=null,pr,uR,uT,on=0,t0=Date.now();
+var kq=.85,lf=Date.now(),sl=0,c=document.getElementById("wf"),gl=null,pr,uR,uT,on=0,t0=Date.now();
 function init(){try{gl=c.getContext("webgl",{antialias:false,powerPreference:"low-power"});if(!gl)return 0;
 function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o}
 pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,"attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}"));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,`precision mediump float;uniform vec2 R;uniform float T;
 float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
 float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*n(p);p=p*2.03+vec2(1.7,9.2);a*=.5;}return v;}
-void main(){vec2 uv=gl_FragCoord.xy/R;float as=R.x/R.y;vec2 p=(uv-.5)*vec2(as,1.);
-float rk=fbm(p*vec2(3.,2.2));vec3 col=mix(vec3(.05,.07,.06),vec3(.2,.22,.2),rk);col*=.45+.9*fbm(p*10.);
-col=mix(col,vec3(.05,.22,.08),smoothstep(.5,.78,fbm(p*vec2(4.,3.)+4.))*.75);
-float cx=sin(uv.y*3.)*.03,wd=.16+.07*(1.-uv.y)+.02*fbm(vec2(uv.y*6.,1.));
-float m=smoothstep(wd,wd-.05,abs(p.x-cx));m*=smoothstep(.86,.83,uv.y)*smoothstep(.14,.2,uv.y);
-float s=fbm(vec2(p.x*22.,uv.y*2.5+T*1.9))*.6+fbm(vec2(p.x*46.,uv.y*5.+T*3.4))*.4;
-float fl=smoothstep(.25,.9,s);vec3 w=mix(vec3(.55,.74,.82),vec3(1.),fl)*(.8+.3*s);
-col=mix(col,w,m*(.72+.28*fl));
-float pool=smoothstep(.2,.17,uv.y);
-vec3 pc=mix(vec3(.02,.09,.1),vec3(.12,.3,.32),fbm(vec2(p.x*6.+sin(T*.5),uv.y*18.-T*.6)));col=mix(col,pc,pool);
-float fo=exp(-pow((uv.y-.19)*26.,2.))*smoothstep(wd+.12,0.,abs(p.x-cx))*(.55+.45*fbm(vec2(p.x*40.,T*4.)));col+=fo*.9;
-float mi=smoothstep(.35,.9,fbm(vec2(p.x*2.2+T*.05,uv.y*3.-T*.12)));col+=vec3(.75,.86,.9)*mi*smoothstep(.5,.1,uv.y)*smoothstep(.6,0.,abs(p.x))*.75;
-col+=vec3(.5,.66,.55)*pow(max(0.,1.-length(p-vec2(.3,.9))),3.)*.35*(.7+.3*sin(T*.3));
-col*=1.-.9*dot(p,p)*.55;gl_FragColor=vec4(col,1.);}`));gl.linkProgram(pr);if(!gl.getProgramParameter(pr,gl.LINK_STATUS))return 0;gl.useProgram(pr);
+void main(){vec2 uv=gl_FragCoord.xy/R;float ar=R.x/R.y;vec2 p=(uv-.5)*vec2(ar,1.);float sx=p.x/ar;
+float rk=fbm(p*vec2(5.,3.));float cr=1.-abs(fbm(p*vec2(11.,6.))*2.-1.);
+vec3 col=mix(vec3(.07,.07,.065),vec3(.5,.46,.38),pow(rk,1.6));col*=.45+cr*cr*.9;col*=.8+.35*sin(uv.y*70.+fbm(p*6.)*7.);
+col*=.7+.6*smoothstep(-.35,.35,-sx+.15*fbm(p*3.));
+col=mix(col,vec3(.06,.26,.09)*(.5+fbm(p*30.)),smoothstep(.52,.72,fbm(p*vec2(4.,3.)+4.))*.8);
+float cx=sin(uv.y*3.)*.03*ar,wd=(.13+.07*(1.-uv.y))*ar+.012*fbm(vec2(uv.y*9.,1.));
+float lip=.835+.012*fbm(vec2(sx*25.,2.));
+float m=smoothstep(wd,wd-.012*ar,abs(p.x-cx)+.01*ar*fbm(vec2(uv.y*30.,3.)));m*=smoothstep(lip,lip-.012,uv.y)*smoothstep(.14,.19,uv.y);
+float s=fbm(vec2(sx*18.,uv.y*2.+T*2.2))*.5+fbm(vec2(sx*55.,uv.y*6.+T*4.))*.5;
+float fl=smoothstep(.36,.68,s);float ln=pow(n(vec2(sx*80.,uv.y*1.3+T*3.4)),3.)*1.6;
+vec3 w=mix(vec3(.3,.5,.58),vec3(1.),fl)+ln*.35;w*=.85+.25*uv.y;
+col=mix(col,w,m);
+float pool=smoothstep(.2,.185,uv.y);
+vec3 pc=mix(vec3(.02,.1,.12),vec3(.2,.4,.42),smoothstep(.45,.7,fbm(vec2(sx*10.,uv.y*60.-T*.8))));pc+=.05*sin(uv.y*170.+fbm(vec2(sx*9.,uv.y*20.))*9.-T*2.);col=mix(col,pc,pool);
+float fo=exp(-pow((uv.y-.19)*30.,2.))*smoothstep(wd+.06*ar,0.,abs(p.x-cx))*(.5+.6*fbm(vec2(sx*40.,T*5.)));col+=fo*.9;
+float mi=smoothstep(.4,.9,fbm(vec2(sx*3.+T*.05,uv.y*4.-T*.12)));col+=vec3(.75,.86,.9)*mi*smoothstep(.45,.12,uv.y)*smoothstep(.45,0.,abs(sx))*.55;
+float ray=pow(max(0.,fbm(vec2((sx+uv.y*.5)*5.,T*.08))-.35),1.5)*smoothstep(.2,1.,uv.y);
+float sw=sin(T*.8+uv.y*5.)*.03;float fol=fbm(vec2(sx*14.+sw,uv.y*14.+T*.05));
+float ed=smoothstep(.0,.04,abs(sx)+(fol-.5)*.34+(1.-uv.y)*.04-.3);
+vec3 leaf=mix(vec3(.01,.1,.03),vec3(.35,.6,.12),smoothstep(.35,.85,fbm(p*45.+sw*5.))*(.5+ray)+fol*.3);col=mix(col,leaf,ed);
+float gr=smoothstep(.0,.04,.11-uv.y+.06*fbm(vec2(sx*35.,1.)));col=mix(col,vec3(.03,.22,.05)*(.5+fbm(vec2(sx*90.,uv.y*40.))),gr);
+col+=vec3(.9,.95,.7)*ray*.3;
+vec2 gg=uv*vec2(ar*30.,30.);vec2 g=floor(gg);float rn=h(g);vec2 f=fract(gg)-.5-.3*vec2(sin(T+rn*6.),cos(T*.8+rn*9.));
+col+=vec3(1.,.95,.6)*smoothstep(.08,0.,length(f))*step(.94,rn)*(.5+.5*sin(T*2.+rn*30.));
+col*=1.-.7*dot(p,p)*.5;gl_FragColor=vec4(col,1.);}`));gl.linkProgram(pr);if(!gl.getProgramParameter(pr,gl.LINK_STATUS))return 0;gl.useProgram(pr);
 var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);var a=gl.getAttribLocation(pr,"a");gl.enableVertexAttribArray(a);gl.vertexAttribPointer(a,2,gl.FLOAT,false,0,0);uR=gl.getUniformLocation(pr,"R");uT=gl.getUniformLocation(pr,"T");return 1}catch(e){return 0}}
-function sz(){var k=.6;c.width=Math.round(innerWidth*k);c.height=Math.round(innerHeight*k);if(gl)gl.viewport(0,0,c.width,c.height)}
-function fr(){if(!on)return;if(!document.hidden){gl.uniform2f(uR,c.width,c.height);gl.uniform1f(uT,(Date.now()-t0)/1000);gl.drawArrays(gl.TRIANGLES,0,3)}requestAnimationFrame(fr)}
+function sz(){var k=Math.min(window.devicePixelRatio||1,2)*kq;c.width=Math.round(innerWidth*k);c.height=Math.round(innerHeight*k);if(gl)gl.viewport(0,0,c.width,c.height)}
+function fr(){if(!on)return;var nw=Date.now(),dd=nw-lf;lf=nw;if(dd>40&&dd<500&&kq>.45&&++sl>25){kq-=.1;sl=0;sz()}if(!document.hidden){gl.uniform2f(uR,c.width,c.height);gl.uniform1f(uT,(Date.now()-t0)/1000);gl.drawArrays(gl.TRIANGLES,0,3)}requestAnimationFrame(fr)}
 function set(v){if(v&&!gl&&!init()){c.style.display="none";return}c.style.display=v?"block":"none";if(v&&!on){on=1;sz();fr()}if(!v)on=0}
 window.addEventListener("resize",function(){if(on)sz()});
-var ab=applyBg;applyBg=function(v,n){ab(v,n);set(+v===8)};
-try{var sv=+LS.g("bg",0);if(sv===8)applyBg(8,1)}catch(e){}
+window.WFset=set;try{if(localStorage.getItem("bg")==="8")set(true)}catch(e){}
 /* quasar logo */
 [].forEach.call(document.querySelectorAll(".qlogo"),function(cv){var x=cv.getContext("2d"),S=cv.width,t=0;(function f(){requestAnimationFrame(f);if(document.hidden||!cv.offsetWidth)return;t+=.03;x.clearRect(0,0,S,S);x.save();x.translate(S/2,S/2);x.rotate(-.5+.05*Math.sin(t*.6));x.globalCompositeOperation="lighter";
 [-1,1].forEach(function(d){var g=x.createLinearGradient(0,0,0,d*S*.5);g.addColorStop(0,"rgba(190,220,255,.95)");g.addColorStop(1,"rgba(70,130,255,0)");x.fillStyle=g;x.beginPath();x.moveTo(-S*.04,0);x.lineTo(0,d*S*.5);x.lineTo(S*.04,0);x.fill()});
 x.save();x.scale(1,.28);for(var i=0;i<6;i++){x.lineWidth=S*.035;x.strokeStyle="rgba(255,"+(140+i*20)+","+(50+i*28)+","+(.7-i*.09)+")";x.beginPath();var a=t*(1.6-i*.18);x.arc(0,0,S*(.16+i*.055),a,a+4.4);x.stroke()}x.restore();
 var g=x.createRadialGradient(0,0,0,0,0,S*.2);g.addColorStop(0,"rgba(255,255,255,1)");g.addColorStop(.35,"rgba(170,205,255,.7)");g.addColorStop(1,"rgba(80,120,255,0)");x.fillStyle=g;x.beginPath();x.arc(0,0,S*.2,0,7);x.fill();x.restore()})()});
+})();</script>
+<script>(function(){var $=function(i){return document.getElementById(i)};
+function g(k,d){try{var v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}}function sv(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+var DP="Sen Quasar ilovasining shaxsiy AI yordamchisisan. Oʻzbek tilida (lotin yozuvida), qisqa, aniq va samimiy javob ber. Foydalanuvchi boshqa tilda yozsa, shu tilda javob ber.";
+var hist=[];try{hist=JSON.parse(g("aih","[]"))||[]}catch(e){}
+var EMBED_KEY="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",WORKER="https://quasar-ai.nebulacs44.workers.dev",busy=0,loaded=0; /* WORKER: Cloudflare Worker manzili, masalan "https://quasar-ai.SIZNING.workers.dev" */
+$("aik").value=g("aik","");$("aip").value=g("aip",DP);if(!g("aik","")&&!WORKER&&!EMBED_KEY)$("aid").open=true;
+function add(role,txt){var d=document.createElement("div");d.className="aim "+(role==="user"?"aiu":"aia");d.textContent=txt;$("ail").appendChild(d);return d}
+function draw(){$("ail").innerHTML="";hist.forEach(function(m){add(m.role,m.content)})}
+function models(){if(loaded)return;loaded=1;fetch("https://openrouter.ai/api/v1/models").then(function(r){return r.json()}).then(function(j){var a=(j.data||[]).filter(function(m){return m.pricing&&+m.pricing.prompt===0&&+m.pricing.completion===0}).sort(function(x,y){return (y.context_length||0)-(x.context_length||0)});var sel=$("aim");sel.innerHTML="";var cur=g("aim","");var ids=a.map(function(m){return m.id});var def=ids.indexOf("openrouter/free")>-1?"openrouter/free":ids[0];a.forEach(function(m){var o=document.createElement("option");o.value=m.id;o.textContent=(m.id==="openrouter/free"?"⭐ avtomatik: ":"")+(m.name||m.id);sel.appendChild(o)});sel.value=ids.indexOf(cur)>-1?cur:def;if(!sel.value&&ids.length)sel.value=ids[0]}).catch(function(){loaded=0;$("ain").textContent="Modellar roʻyxati yuklanmadi (internet?)."})}
+$("aik1").onclick=function(e){e.preventDefault();try{Telegram.WebApp.openLink("https://openrouter.ai/keys")}catch(x){window.open("https://openrouter.ai/keys","_blank")}};
+$("aisv").onclick=function(){sv("aik",$("aik").value.trim());sv("aim",$("aim").value);sv("aip",$("aip").value.trim()||DP);$("ain").textContent="Saqlandi ✅";$("aid").open=false};
+$("aic").onclick=function(){hist=[];sv("aih","[]");draw()};
+function err(d,t){d.classList.remove("ty");d.textContent=t}
+function send(){var q=$("aii").value.trim();if(!q||busy)return;var key=g("aik","")||EMBED_KEY;if(!key&&!WORKER){$("aid").open=true;$("ain").textContent="Avval OpenRouter kalitini kiriting.";return}
+$("aii").value="";hist.push({role:"user",content:q});add("user",q);var d=add("assistant","");d.classList.add("ty");busy=1;var out="";
+window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
+fetch(key?"https://openrouter.ai/api/v1/chat/completions":WORKER,{method:"POST",headers:key?{"Content-Type":"application/json","Authorization":"Bearer "+key}:{"Content-Type":"application/json"},body:JSON.stringify({model:g("aim","")||$("aim").value||"openrouter/free",stream:true,messages:[{role:"system",content:g("aip",DP)}].concat(hist.slice(-20))})}).then(function(r){
+if(!r.ok)return r.json().catch(function(){return{}}).then(function(j){throw new Error((j.error&&j.error.message)||("Xato "+r.status))});
+var rd=r.body.getReader(),dc=new TextDecoder(),buf="";
+function pump(){return rd.read().then(function(x){if(x.done)return;buf+=dc.decode(x.value,{stream:true});var L=buf.split("\n");buf=L.pop();L.forEach(function(l){if(l.indexOf("data: ")!==0)return;var p=l.slice(6).trim();if(p==="[DONE]")return;try{var c=JSON.parse(p).choices[0].delta.content;if(c){out+=c;d.classList.remove("ty");d.textContent=out;window.scrollTo(0,document.body.scrollHeight)}}catch(e){}});return pump()})}
+return pump()}).then(function(){if(!out)throw new Error("Boʻsh javob keldi. Boshqa modelni tanlab koʻring.");hist.push({role:"assistant",content:out});hist=hist.slice(-40);sv("aih",JSON.stringify(hist))}).catch(function(e){hist.pop();var m=String(e.message||e);err(d,"😕 "+(m==="Failed to fetch"?"Ulanib boʻlmadi. Internetni tekshiring (Claude ichidagi oynada tashqi soʻrovlar bloklanadi).":m))}).then(function(){busy=0})}
+$("aig").onclick=send;$("aii").onkeydown=function(e){if(e.key==="Enter")send()};
+draw();
+document.querySelector("nav").addEventListener("click",function(e){var b=e.target.closest("button");if(b&&b.dataset.p==="ai")models()});
 })();</script>
 </body>
 </html>
