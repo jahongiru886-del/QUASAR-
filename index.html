@@ -1589,5 +1589,45 @@ draw();
 document.querySelector("nav").addEventListener("click",function(e){var b=e.target.closest("button");if(b&&b.dataset.p==="ai")models()});
 })();</script>
 <script>(function(){var p=document.getElementById("p-ai");function f(){document.body.classList.toggle("aiwh",p.classList.contains("on"))}new MutationObserver(f).observe(p,{attributes:true,attributeFilter:["class"]});f()})();</script>
+<style>
+#wp{position:fixed;inset:0;z-index:99999;pointer-events:none;display:none;opacity:0;transition:opacity .18s}
+#wp.on{display:block}#wp.v{opacity:1}#wp.o{opacity:0;transition:opacity .5s}
+#wp canvas{width:100%;height:100%;display:block}
+#wpt{position:absolute;left:0;right:0;top:42%;text-align:center;font:800 9.5vw/1 system-ui,sans-serif;letter-spacing:.14em;padding-left:.14em;color:#fff;text-shadow:0 0 18px #39ff88,0 0 55px #39ff88,0 0 120px #2a7bff;opacity:0}
+#wpt small{display:block;margin-top:2.2vh;font:600 3.6vw/1 system-ui,sans-serif;letter-spacing:.5em;color:#9dffc8;text-shadow:0 0 14px #39ff88}
+#wp.t #wpt{animation:wpt 1s cubic-bezier(.2,.9,.2,1) forwards}
+@keyframes wpt{0%{opacity:0;transform:scale(2.6);filter:blur(22px);letter-spacing:.8em}55%{opacity:1;filter:blur(0)}100%{opacity:1;transform:scale(1);filter:blur(0);letter-spacing:.14em}}
+#p-ai.wowin{animation:wowin 1s cubic-bezier(.2,.8,.2,1) 1.3s backwards}
+@keyframes wowin{from{opacity:0;transform:scale(.88) translateY(30px);filter:blur(16px) brightness(2.2)}to{opacity:1;transform:none;filter:none}}
+</style>
+<div id="wp"><canvas></canvas><div id="wpt">QUASAR AI<small>OCHILMOQDA</small></div></div>
+<script>(function(){
+if(window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches)return;
+var wp=document.getElementById("wp"),cv=wp.querySelector("canvas"),x=cv.getContext("2d"),busy=0,N=360,S=[];
+function snd(){try{if(!document.getElementById("snd").classList.contains("on"))return;var A=window.__wa||(window.__wa=new(window.AudioContext||window.webkitAudioContext)()),t=A.currentTime,o=A.createOscillator(),g=A.createGain(),f=A.createBiquadFilter();o.type="sawtooth";o.frequency.setValueAtTime(60,t);o.frequency.exponentialRampToValueAtTime(1400,t+1.05);f.type="lowpass";f.frequency.setValueAtTime(300,t);f.frequency.exponentialRampToValueAtTime(5000,t+1.05);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.22,t+.9);g.gain.exponentialRampToValueAtTime(.0001,t+1.15);o.connect(f);f.connect(g);g.connect(A.destination);o.start(t);o.stop(t+1.2);
+var b=A.createOscillator(),h=A.createGain();b.type="sine";b.frequency.setValueAtTime(140,t+1.05);b.frequency.exponentialRampToValueAtTime(35,t+1.8);h.gain.setValueAtTime(.0001,t+1.04);h.gain.exponentialRampToValueAtTime(.5,t+1.07);h.gain.exponentialRampToValueAtTime(.0001,t+1.9);b.connect(h);h.connect(A.destination);b.start(t+1.04);b.stop(t+1.95)}catch(e){}}
+function hap(){try{Telegram.WebApp.HapticFeedback.impactOccurred("medium")}catch(e){}try{navigator.vibrate&&navigator.vibrate([20,40,30,40,50,40,90])}catch(e){}
+setTimeout(function(){try{Telegram.WebApp.HapticFeedback.notificationOccurred("success")}catch(e){}try{navigator.vibrate&&navigator.vibrate(160)}catch(e){}},1050)}
+function run(){if(busy)return;busy=1;var W=cv.width=innerWidth*Math.min(devicePixelRatio||1,2),H=cv.height=innerHeight*Math.min(devicePixelRatio||1,2),cx=W/2,cy=H/2,D=Math.hypot(cx,cy),P=document.getElementById("p-ai"),k=W/innerWidth;
+S=[];for(var i=0;i<N;i++)S.push({a:Math.random()*6.2832,r:Math.random()*D*.6,s:.4+Math.random()*1.2,c:[[57,255,136],[0,229,255],[160,200,255],[255,255,255],[182,255,0]][i%5]});
+wp.className="on";void wp.offsetWidth;wp.classList.add("v");P.classList.add("wowin");snd();hap();
+var t0=performance.now(),last=t0,T=1100,fired=0;
+(function f(n){var e=n-t0,dt=Math.min(n-last,40)/16.7;last=n;
+var v=e<T?Math.pow(e/T,2.2):Math.max(.05,1-(e-T)/700);
+if(e>=T&&!fired){fired=1;wp.classList.add("t")}
+x.globalCompositeOperation="source-over";x.fillStyle="rgba(2,6,10,"+(.35-.2*v)+")";x.fillRect(0,0,W,H);
+var g=x.createRadialGradient(cx,cy,0,cx,cy,D*.7);g.addColorStop(0,"rgba(57,255,136,"+(.05+.35*v*v)+")");g.addColorStop(.5,"rgba(30,90,255,"+(.04*v)+")");g.addColorStop(1,"rgba(0,0,0,0)");x.fillStyle=g;x.fillRect(0,0,W,H);
+x.globalCompositeOperation="lighter";x.lineCap="round";
+for(var i=0;i<N;i++){var s=S[i],sp=(1.5+v*55)*s.s*(.4+s.r/D)*dt*k;s.r+=sp;if(s.r>D*1.05){s.r=Math.random()*20;s.a=Math.random()*6.2832}
+var tr=Math.max(2,sp*(.6+v*3)),c=Math.cos(s.a),d=Math.sin(s.a),al=Math.min(1,.2+s.r/D*1.2);
+x.strokeStyle="rgba("+s.c[0]+","+s.c[1]+","+s.c[2]+","+al+")";x.lineWidth=(1+s.r/D*2.8)*k;x.beginPath();x.moveTo(cx+c*(s.r-tr),cy+d*(s.r-tr));x.lineTo(cx+c*s.r,cy+d*s.r);x.stroke()}
+if(e>T-40){var q=(e-T+40)/900,fl=Math.max(0,1-q*3.2);if(q<1.2){
+if(fl>0){x.fillStyle="rgba(220,255,235,"+fl*.9+")";x.fillRect(0,0,W,H)}
+for(var j=0;j<3;j++){var rq=q-j*.09;if(rq<0||rq>1)continue;var rr=D*1.1*(1-Math.pow(1-rq,3));x.strokeStyle="rgba("+(j?"90,170,255":"57,255,136")+","+(1-rq)+")";x.lineWidth=(14-j*4)*(1-rq)*k+1;x.beginPath();x.arc(cx,cy,rr,0,6.2832);x.stroke()}}}
+if(e>1750)wp.classList.add("o");
+if(e<2300)requestAnimationFrame(f);else{wp.className="";P.classList.remove("wowin");busy=0}})(t0)}
+document.querySelector("nav").addEventListener("click",function(e){var b=e.target.closest("button");if(b&&b.dataset.p==="ai"&&!document.getElementById("p-ai").classList.contains("on"))run()},true);
+})();</script>
+
 </body>
 </html>
