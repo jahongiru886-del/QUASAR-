@@ -269,6 +269,59 @@ h1{background:none!important;-webkit-text-fill-color:currentColor!important;colo
 .aibar{position:sticky;bottom:calc(96px + env(safe-area-inset-bottom,0px));display:flex;gap:8px;margin-top:16px;z-index:5}
 .aibar .sbar{flex:1;margin:0}
 #aig{flex:0 0 52px;width:52px;height:52px;padding:0;border-radius:50%}
+
+/* ===== AI REDESIGN ===== */
+#p-ai h1{display:none}
+#p-ai .aih,#p-ai .aih *{text-transform:none}
+#aid{width:fit-content;margin:2px 0 0 auto;padding:8px 16px;border-radius:999px}
+#aid[open]{width:auto;padding:16px;border-radius:26px}
+.aih{text-align:center;padding:34px 0 8px;position:relative;animation:rise 1s var(--ease) backwards}
+.aio{position:absolute;left:50%;top:-10px;width:260px;height:260px;margin-left:-130px;border-radius:50%;background:radial-gradient(circle,var(--pr),transparent 65%);opacity:.22;filter:blur(30px);animation:orb 8s ease-in-out infinite;pointer-events:none}
+@keyframes orb{0%,100%{transform:translate(-20px,0) scale(1)}50%{transform:translate(24px,16px) scale(1.15)}}
+.aiw{font-size:64px;line-height:1;color:var(--pr);display:inline-block;position:relative;text-shadow:0 0 30px var(--pr);animation:spk 6s ease-in-out infinite}
+@keyframes spk{0%,100%{transform:rotate(0) scale(1)}50%{transform:rotate(90deg) scale(1.18)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.aig2{font-family:var(--serif);font-size:1.9em;line-height:1.15;margin:14px 0 22px;position:relative}
+.aics{display:flex;flex-direction:column;gap:10px;position:relative}
+.aic2{padding:14px 18px;border-radius:20px;border:1px solid var(--hair);background:var(--glass);backdrop-filter:blur(18px);color:var(--tx);font:inherit;text-align:left;animation:rise .8s var(--ease) backwards;transition:transform .5s var(--ease),border-color .3s}
+.aic2:active{transform:scale(.97);border-color:var(--pr)}
+#p-ai .aia{background:none!important;border:0!important;backdrop-filter:none;border-radius:0;padding:4px 4px 4px 36px;position:relative;max-width:100%;animation:aiin .6s var(--ease) backwards}
+#p-ai .aia::before{content:"✦";position:absolute;left:4px;top:1px;font-size:1.3em;color:var(--pr);text-shadow:0 0 14px var(--pr)}
+#p-ai .aia.ty::before{animation:spin 1.4s linear infinite}
+#p-ai .aia.ty::after{content:"O‘ylayapman…";letter-spacing:.02em;font-size:1em;background:linear-gradient(90deg,var(--sub) 30%,var(--tx) 50%,var(--sub) 70%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shim2 1.6s linear infinite}
+@keyframes shim2{from{background-position:120% 0}to{background-position:-120% 0}}
+#p-ai .aiu{background:rgba(255,255,255,.1)!important;color:var(--tx)!important;border-radius:22px 22px 6px 22px;max-width:82%;animation:aiu .55s var(--ease) backwards}
+@keyframes aiin{from{opacity:0;transform:translateY(16px);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+@keyframes aiu{from{opacity:0;transform:translateX(30px) scale(.94)}to{opacity:1;transform:none}}
+.tk{animation:tk .6s ease backwards}
+@keyframes tk{from{opacity:0;filter:blur(5px)}to{opacity:1;filter:none}}
+.aibar{align-items:center;padding:7px 7px 7px 18px;border-radius:30px;border:1px solid var(--hair);background:rgba(12,16,18,.55);backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);transition:box-shadow .5s var(--ease),border-color .4s}
+.aibar:focus-within{border-color:var(--pr);box-shadow:0 0 0 5px rgba(255,255,255,.05),0 0 40px -6px var(--pr)}
+.aibar .sbar input{background:none!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;padding:12px 4px;border-radius:0}
+#aig{transform:scale(.82);opacity:.5;transition:transform .5s var(--ease),opacity .3s}
+.aibar.has #aig{transform:scale(1);opacity:1;animation:pp 2.4s ease-in-out infinite}
+@keyframes pp{50%{box-shadow:0 0 0 8px rgba(255,255,255,.08)}}
+@media (prefers-reduced-motion:reduce){.aiw,.aio,#p-ai .aia.ty::before{animation:none}}
+
+/* ===== AI: white mode ===== */
+body{transition:background .5s}
+body.aiwh{background:#fff!important}
+body.aiwh #fon,body.aiwh #wf,body.aiwh #sky,body.aiwh #fonv{display:none!important}
+body.aiwh::before,body.aiwh::after{display:none}
+#p-ai{--tx:#15171a;--sub:#6a6f76;--glass:rgba(0,0,0,.04);--hair:rgba(0,0,0,.12);--pr:#2f5bff;color:var(--tx)}
+#p-ai .btn{color:#fff}
+#p-ai .btn.g{color:var(--tx);background:transparent}
+#p-ai .aibar{background:rgba(255,255,255,.92);box-shadow:0 8px 30px rgba(0,0,0,.08)}
+#p-ai .aibar .sbar input{color:var(--tx)}
+#p-ai .aiu{background:rgba(0,0,0,.06)!important}
+#p-ai select option{background:#fff;color:#15171a}
+body.aiwh nav{background:rgba(255,255,255,.88)!important;border-color:rgba(0,0,0,.12)!important}
+body.aiwh nav button{color:#6a6f76}
+body.aiwh nav button.on{color:#15171a}
+body.aiwh nav .ind{background:rgba(0,0,0,.08);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.aiq{width:128px;height:128px;position:relative;display:block;margin:0 auto}
+.ais{position:relative;margin:-10px 0 24px;color:var(--sub);letter-spacing:.2em;text-transform:uppercase!important;font-size:.7em}
+.aio{opacity:.16}
 </style>
 </head>
 <body>
@@ -337,7 +390,7 @@ h1{background:none!important;-webkit-text-fill-color:currentColor!important;colo
 </section>
 
 <section class="page" id="p-fx"><h1>💱 Kurs</h1><div class="card"><div class="sbar"><input id="fxa" type="text" inputmode="decimal" value="1" autocomplete="off"></div><div class="fxr"><select id="fxf"></select><button class="fxs" id="fxw" aria-label="swap">⇄</button><select id="fxt"></select></div><div class="fxo" id="fxo">…</div><div class="fxm" id="fxm">Kurs yuklanmoqda...</div></div><h3>1 birlik = soʻm <small id="fxd"></small></h3><div id="fxl"></div><p class="fxm">Bu oʻrtacha bozor kursi. Bank va ayirboshlash punktlarida kurs biroz farq qiladi.</p></section>
-<section class="page" id="p-ai"><h1>🤖 AI</h1><details class="card" id="aid"><summary>⚙️ AI sozlamalari</summary><div class="fxm" style="margin-top:10px">1. <a href="https://openrouter.ai/keys" id="aik1" style="color:var(--pr)">openrouter.ai/keys</a> da bepul kalit yarating va pastga qoʻying. Kalit faqat shu telefonda saqlanadi.</div><div class="sbar" style="margin-top:8px"><input id="aik" type="password" placeholder="sk-or-..." autocomplete="off"></div><select id="aim"></select><textarea id="aip" rows="4" placeholder="AI xarakteri"></textarea><div class="fxr"><button class="btn" id="aisv">Saqlash</button><button class="btn g" id="aic">Suhbatni tozalash</button></div><div class="fxm" id="ain"></div></details><div id="ail"></div><div class="aibar"><div class="sbar"><input id="aii" type="text" placeholder="Savol yozing..." autocomplete="off"></div><button class="btn" id="aig">➤</button></div></section>
+<section class="page" id="p-ai"><h1>🤖 AI</h1><details class="card" id="aid"><summary>⚙️ AI sozlamalari</summary><div class="fxm" style="margin-top:10px">1. <a href="https://openrouter.ai/keys" id="aik1" style="color:var(--pr)">openrouter.ai/keys</a> da bepul kalit yarating va pastga qoʻying. Kalit faqat shu telefonda saqlanadi.</div><div class="sbar" style="margin-top:8px"><input id="aik" type="password" placeholder="sk-or-..." autocomplete="off"></div><select id="aim"></select><textarea id="aip" rows="4" placeholder="AI xarakteri"></textarea><div class="fxr"><button class="btn" id="aisv">Saqlash</button><button class="btn g" id="aic">Suhbatni tozalash</button></div><div class="fxm" id="ain"></div></details><div id="ail"></div><div class="aibar" id="aib"><div class="sbar"><input id="aii" type="text" placeholder="Savol yozing..." autocomplete="off"></div><button class="btn" id="aig">➤</button></div></section>
 <section class="page" id="p-me">
 <div class="abar"><button class="btn g" id="xacc">← Hisobdan chiqish</button></div>
 <div class="card me">
@@ -1501,28 +1554,40 @@ var g=x.createRadialGradient(0,0,0,0,0,S*.2);g.addColorStop(0,"rgba(255,255,255,
 })();</script>
 <script>(function(){var $=function(i){return document.getElementById(i)};
 function g(k,d){try{var v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}}function sv(k,v){try{localStorage.setItem(k,v)}catch(e){}}
-var DP="Sen Quasar ilovasining shaxsiy AI yordamchisisan. Oʻzbek tilida (lotin yozuvida), qisqa, aniq va samimiy javob ber. Foydalanuvchi boshqa tilda yozsa, shu tilda javob ber.";
+var DP="Sen Quasar ilovasining shaxsiy AI yordamchisisan. Oʻzbek tilida (lotin yozuvida), qisqa, aniq va samimiy javob ber. Foydalanuvchi boshqa tilda yozsa, shu tilda javob ber. Kirill harflarini va boshqa tillarni aralashtirma. Bilmasang, bilmayman de, oʻylab topma.";
 var hist=[];try{hist=JSON.parse(g("aih","[]"))||[]}catch(e){}
 var EMBED_KEY="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",WORKER="https://quasar-ai.nebulacs44.workers.dev",busy=0,loaded=0; /* WORKER: Cloudflare Worker manzili, masalan "https://quasar-ai.SIZNING.workers.dev" */
 $("aik").value=g("aik","");$("aip").value=g("aip",DP);if(!g("aik","")&&!WORKER&&!EMBED_KEY)$("aid").open=true;
 function add(role,txt){var d=document.createElement("div");d.className="aim "+(role==="user"?"aiu":"aia");d.textContent=txt;$("ail").appendChild(d);return d}
-function draw(){$("ail").innerHTML="";hist.forEach(function(m){add(m.role,m.content)})}
-function models(){if(loaded)return;loaded=1;fetch("https://openrouter.ai/api/v1/models").then(function(r){return r.json()}).then(function(j){var a=(j.data||[]).filter(function(m){return m.pricing&&+m.pricing.prompt===0&&+m.pricing.completion===0}).sort(function(x,y){return (y.context_length||0)-(x.context_length||0)});var sel=$("aim");sel.innerHTML="";var cur=g("aim","");var ids=a.map(function(m){return m.id});var def=ids.indexOf("openrouter/free")>-1?"openrouter/free":ids[0];a.forEach(function(m){var o=document.createElement("option");o.value=m.id;o.textContent=(m.id==="openrouter/free"?"⭐ avtomatik: ":"")+(m.name||m.id);sel.appendChild(o)});sel.value=ids.indexOf(cur)>-1?cur:def;if(!sel.value&&ids.length)sel.value=ids[0]}).catch(function(){loaded=0;$("ain").textContent="Modellar roʻyxati yuklanmadi (internet?)."})}
+function aq(cv){var x=cv.getContext("2d"),S=cv.width,t=0;(function f(){if(!document.body.contains(cv))return;requestAnimationFrame(f);if(document.hidden||!cv.offsetWidth)return;t+=.03;x.clearRect(0,0,S,S);x.save();x.translate(S/2,S/2);x.rotate(-.5+.06*Math.sin(t*.6));
+[-1,1].forEach(function(d){var g=x.createLinearGradient(0,0,0,d*S*.5);g.addColorStop(0,"rgba(40,90,255,.9)");g.addColorStop(1,"rgba(40,90,255,0)");x.fillStyle=g;x.beginPath();x.moveTo(-S*.045,0);x.lineTo(0,d*S*.5);x.lineTo(S*.045,0);x.fill()});
+x.save();x.scale(1,.3);for(var i=0;i<7;i++){x.lineWidth=S*.032;x.strokeStyle="rgba(255,"+(110+i*18)+","+(20+i*14)+","+(.85-i*.1)+")";x.beginPath();var a=t*(1.7-i*.2);x.arc(0,0,S*(.15+i*.05),a,a+4.6);x.stroke()}x.restore();
+var r=S*.19*(1+.08*Math.sin(t*3)),g=x.createRadialGradient(0,0,0,0,0,r);g.addColorStop(0,"rgba(255,255,255,1)");g.addColorStop(.25,"rgba(255,205,110,.95)");g.addColorStop(.6,"rgba(60,100,255,.55)");g.addColorStop(1,"rgba(60,100,255,0)");x.fillStyle=g;x.beginPath();x.arc(0,0,r,0,7);x.fill();x.restore()})()}
+function hero(){var h=document.createElement("div");h.className="aih";h.innerHTML='<div class="aio"></div><canvas class="aiq" width="256" height="256"></canvas><div class="aig2">Salom! Nima haqida gaplashamiz?</div><div class="ais">Quasar AI xizmatingizda</div><div class="aics"></div>';["Oʻzbekiston haqida qiziqarli fakt","Dasturlashni qanday boshlayman?","Menga kulgili hazil ayt","Ingliz tilini oʻrganish rejasi"].forEach(function(t,i){var b=document.createElement("button");b.className="aic2";b.textContent=t;b.style.animationDelay=(.45+i*.1)+"s";b.onclick=function(){$("aii").value=t;send()};h.querySelector(".aics").appendChild(b)});$("ail").appendChild(h);aq(h.querySelector(".aiq"))}
+function draw(){$("ail").innerHTML="";if(!hist.length)hero();hist.forEach(function(m){add(m.role,m.content)})}
+function models(){if(loaded)return;loaded=1;fetch("https://openrouter.ai/api/v1/models").then(function(r){return r.json()}).then(function(j){var a=(j.data||[]).filter(function(m){return m.pricing&&+m.pricing.prompt===0&&+m.pricing.completion===0}).sort(function(x,y){function z(m){var q=/(\d+(?:\.\d+)?)b\b/i.exec(m.id);return q?+q[1]:0}return (z(y)-z(x))||((y.context_length||0)-(x.context_length||0))});var sel=$("aim");sel.innerHTML="";var cur=g("aim","");var ids=a.map(function(m){return m.id});var def=ids[0];a.forEach(function(m){var o=document.createElement("option");o.value=m.id;o.textContent=(m.id==="openrouter/free"?"⭐ avtomatik: ":"")+(m.name||m.id);sel.appendChild(o)});sel.value=ids.indexOf(cur)>-1?cur:def;if(!sel.value&&ids.length)sel.value=ids[0]}).catch(function(){loaded=0;$("ain").textContent="Modellar roʻyxati yuklanmadi (internet?)."})}
 $("aik1").onclick=function(e){e.preventDefault();try{Telegram.WebApp.openLink("https://openrouter.ai/keys")}catch(x){window.open("https://openrouter.ai/keys","_blank")}};
 $("aisv").onclick=function(){sv("aik",$("aik").value.trim());sv("aim",$("aim").value);sv("aip",$("aip").value.trim()||DP);$("ain").textContent="Saqlandi ✅";$("aid").open=false};
 $("aic").onclick=function(){hist=[];sv("aih","[]");draw()};
 function err(d,t){d.classList.remove("ty");d.textContent=t}
-function send(){var q=$("aii").value.trim();if(!q||busy)return;var key=g("aik","")||EMBED_KEY;if(!key&&!WORKER){$("aid").open=true;$("ain").textContent="Avval OpenRouter kalitini kiriting.";return}
-$("aii").value="";hist.push({role:"user",content:q});add("user",q);var d=add("assistant","");d.classList.add("ty");busy=1;var out="";
-window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
-fetch(key?"https://openrouter.ai/api/v1/chat/completions":WORKER,{method:"POST",headers:key?{"Content-Type":"application/json","Authorization":"Bearer "+key}:{"Content-Type":"application/json"},body:JSON.stringify({model:g("aim","")||$("aim").value||"openrouter/free",stream:true,messages:[{role:"system",content:g("aip",DP)}].concat(hist.slice(-20))})}).then(function(r){
-if(!r.ok)return r.json().catch(function(){return{}}).then(function(j){throw new Error((j.error&&j.error.message)||("Xato "+r.status))});
+function cands(){var sel=$("aim"),l=[g("aim","")||sel.value||"openrouter/free"];[].forEach.call(sel.options,function(o){if(l.indexOf(o.value)<0&&l.length<5)l.push(o.value)});return l}
+function tryM(mod,d,key){return new Promise(function(res,rej){var ac=new AbortController(),got=0,out="",to=setTimeout(function(){if(!got)ac.abort()},15000);
+fetch(key?"https://openrouter.ai/api/v1/chat/completions":WORKER,{method:"POST",signal:ac.signal,headers:key?{"Content-Type":"application/json","Authorization":"Bearer "+key}:{"Content-Type":"application/json"},body:JSON.stringify({model:mod,stream:true,temperature:.5,messages:[{role:"system",content:g("aip",DP)}].concat(hist.slice(-20))})}).then(function(r){
+if(!r.ok)return r.json().catch(function(){return{}}).then(function(j){var e=new Error((j.error&&j.error.message)||("Xato "+r.status));e.st=r.status;throw e});
 var rd=r.body.getReader(),dc=new TextDecoder(),buf="";
-function pump(){return rd.read().then(function(x){if(x.done)return;buf+=dc.decode(x.value,{stream:true});var L=buf.split("\n");buf=L.pop();L.forEach(function(l){if(l.indexOf("data: ")!==0)return;var p=l.slice(6).trim();if(p==="[DONE]")return;try{var c=JSON.parse(p).choices[0].delta.content;if(c){out+=c;d.classList.remove("ty");d.textContent=out;window.scrollTo(0,document.body.scrollHeight)}}catch(e){}});return pump()})}
-return pump()}).then(function(){if(!out)throw new Error("Boʻsh javob keldi. Boshqa modelni tanlab koʻring.");hist.push({role:"assistant",content:out});hist=hist.slice(-40);sv("aih",JSON.stringify(hist))}).catch(function(e){hist.pop();var m=String(e.message||e);err(d,"😕 "+(m==="Failed to fetch"?"Ulanib boʻlmadi. Internetni tekshiring (Claude ichidagi oynada tashqi soʻrovlar bloklanadi).":m))}).then(function(){busy=0})}
-$("aig").onclick=send;$("aii").onkeydown=function(e){if(e.key==="Enter")send()};
+function pump(){return rd.read().then(function(x){if(x.done)return;buf+=dc.decode(x.value,{stream:true});var L=buf.split("\n");buf=L.pop();L.forEach(function(l){if(l.indexOf("data: ")!==0)return;var p=l.slice(6).trim();if(p==="[DONE]")return;try{var c=JSON.parse(p).choices[0].delta.content;if(c){if(!got){got=1;clearTimeout(to)}out+=c;d.classList.remove("ty");if(got===1){d.textContent="";got=2}var sp=document.createElement("span");sp.className="tk";sp.textContent=c;d.appendChild(sp);window.scrollTo(0,document.body.scrollHeight)}}catch(e){}});return pump()})}
+return pump()}).then(function(){clearTimeout(to);if(!out){var e=new Error("empty");throw e}res(out)}).catch(function(e){clearTimeout(to);rej(e)})})}
+function send(){var q=$("aii").value.trim();if(!q||busy)return;var key=g("aik","")||EMBED_KEY;if(!key&&!WORKER){$("aid").open=true;$("ain").textContent="Avval OpenRouter kalitini kiriting.";return}
+$("aii").value="";$("aib").classList.remove("has");var hh=document.querySelector(".aih");if(hh)hh.remove();hist.push({role:"user",content:q});add("user",q);var d=add("assistant","");d.classList.add("ty");busy=1;
+window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
+var list=key?cands():[""];
+function go(i){if(i>0){d.textContent="Model band, boshqasi sinalmoqda ("+(i+1)+"/"+list.length+")";d.classList.add("ty")}
+return tryM(list[i],d,key).catch(function(e){var rt=e.name==="AbortError"||e.message==="empty"||e.st===429||e.st===404||e.st>=500||e.st===400;if(rt&&i+1<list.length)return go(i+1);throw e})}
+go(0).then(function(out){hist.push({role:"assistant",content:out});hist=hist.slice(-40);sv("aih",JSON.stringify(hist))}).catch(function(e){hist.pop();var m=String(e.message||e);if(e.name==="AbortError"||m==="empty")m="Hozir bepul modellar band. Birozdan keyin qayta urinib koʻring yoki sozlamalardan boshqa model tanlang.";else if(m==="Failed to fetch")m="Ulanib boʻlmadi. Internetni tekshiring.";else if(e.st===401)m="Kalit noto‘g‘ri yoki o‘chirilgan (401). Yangi kalit kerak.";err(d,"😕 "+m)}).then(function(){busy=0})}
+$("aig").onclick=send;$("aii").oninput=function(){$("aib").classList.toggle("has",!!this.value.trim())};$("aii").onkeydown=function(e){if(e.key==="Enter")send()};
 draw();
 document.querySelector("nav").addEventListener("click",function(e){var b=e.target.closest("button");if(b&&b.dataset.p==="ai")models()});
 })();</script>
+<script>(function(){var p=document.getElementById("p-ai");function f(){document.body.classList.toggle("aiwh",p.classList.contains("on"))}new MutationObserver(f).observe(p,{attributes:true,attributeFilter:["class"]});f()})();</script>
 </body>
 </html>
