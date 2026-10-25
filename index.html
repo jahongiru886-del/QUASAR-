@@ -1840,7 +1840,7 @@ var VOICE={
   fr:"fr-FR-DeniseNeural", es:"es-ES-ElviraNeural", ar:"ar-SA-ZariyahNeural", zh:"zh-CN-XiaoxiaoNeural"
 };
 var GT={uz:"tr",kk:"kk",ru:"ru",en:"en",tr:"tr",de:"de",fr:"fr",es:"es",ar:"ar",zh:"zh"};
-var audio=new Audio();audio.preload="auto";
+var audio=new Audio();audio.preload="auto";audio.referrerPolicy="no-referrer";
 var ttsCache={},ttsToken=0,speaking=false,queue=[],qi=0,curTxt="",speakLang="uz";
 A.voiceId=g("aivoice",VOICE[g("lang","uz")]||VOICE.uz);
 
@@ -1940,12 +1940,22 @@ function sayChunk(i){
     });
   };
   var tryGoogle=function(){
-    var L=lang==="uz"?(GTOK.uz?[GTOK.uz]:["uz","tr"]):(GT[lang]?[GT[lang]]:[]),k=0;
-    if(!L.length)return trySynth();
+    var q=encodeURIComponent(txt.slice(0,190)),U=[];
+    function gt(c){return "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&ttsspeed=1&tl="+c+"&q="+q}
+    function ga(c){return "https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx&tl="+c+"&q="+q}
+    function se(v){return "https://api.streamelements.com/kappa/v2/speech?voice="+v+"&text="+encodeURIComponent(txt.slice(0,300))}
+    if(lang==="uz"){U=[gt("uz"),ga("uz"),gt("tr"),ga("tr"),se("Filiz")]}
+    else if(lang==="en"){U=[gt("en"),ga("en"),se("Brian")]}
+    else if(lang==="ru"){U=[gt("ru"),ga("ru"),se("Tatyana")]}
+    else if(GT[lang]){U=[gt(GT[lang]),ga(GT[lang])]}
+    var k=GTOK[lang]||0;
+    if(k>=U.length)k=0;
+    if(k>0){var w=U.splice(k,1)[0];U.unshift(w)}
+    var n=0;
     function nx(){
-      if(k>=L.length)return trySynth();
-      var l=L[k++];
-      return playUrl(googleUrl(txt,l)).then(function(ok){if(ok){if(lang==="uz")GTOK.uz=l;return true}return nx()});
+      if(n>=U.length)return trySynth();
+      var u=U[n++];
+      return playUrl(u).then(function(ok){if(ok){GTOK[lang]=U.indexOf(u)>=0?0:0;return true}return nx()});
     }
     return nx();
   };
@@ -2738,8 +2748,53 @@ function bindTalkUI(){
   var end=$("tkend");if(end)end.onclick=function(){A.endTalk()};
   document.querySelectorAll(".tk-topic").forEach(function(b){b.onclick=function(){startTopic(b)}});
 }
+/* ---------- Creator kirish kodi (suhbat bo'limi testda) ---------- */
+var CK="52tsj8-bgzmd6-7";
+function ckHash(s){var a=5381,b=2166136261;for(var i=0;i<s.length;i++){var c=s.charCodeAt(i);a=((a<<5)+a+c)>>>0;b=(Math.imul(b^c,16777619))>>>0}return a.toString(36)+"-"+b.toString(36)+"-"+s.length}
+function creatorOk(){return g("tkcreator","")===CK}
+var gateEl=null;
+function gateHide(){if(gateEl&&gateEl.parentNode)gateEl.parentNode.removeChild(gateEl);gateEl=null}
+function gateShow(){
+  if(gateEl)return;
+  var d=document.createElement("div");
+  d.style.cssText="position:fixed;left:0;right:0;top:0;bottom:calc(112px + env(safe-area-inset-bottom,0px));z-index:50;background:rgba(2,7,10,.97);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:26px;text-align:center;color:#e9fff4";
+  var t=document.createElement("div");
+  t.style.cssText="font-size:1.02em;line-height:1.55;max-width:420px;text-transform:none";
+  t.textContent="Uzr, suhbat bo'limi hozir testda, shuning uchun unga faqat Creator kira oladi. Agar siz Creator bo'lsangiz, Creator kodini yozing.";
+  var inp=document.createElement("input");
+  inp.type="password";inp.placeholder="Creator kodi";inp.autocomplete="off";
+  inp.style.cssText="width:100%;max-width:320px;box-sizing:border-box;padding:14px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#e9fff4;font:inherit;text-align:center;text-transform:none";
+  var err=document.createElement("div");
+  err.style.cssText="min-height:1.3em;color:#ff8a8a;font-size:.88em;text-transform:none";
+  var btn=document.createElement("button");
+  btn.textContent="Kirish";
+  btn.style.cssText="padding:12px 34px;border-radius:999px;border:0;background:linear-gradient(160deg,#eafff6,#39ff88 55%,#12a565);color:#03130c;font:inherit;font-weight:700;text-transform:none";
+  function go(){
+    var v=inp.value.trim().toLowerCase();
+    if(ckHash(v)===CK){
+      sv("tkcreator",CK);
+      if(!document.getElementById("wspcss")){
+        var st=document.createElement("style");st.id="wspcss";
+        st.textContent=".wsp{position:relative;width:58px;height:58px}.wsp i{position:absolute;left:0;top:0;width:100%;height:100%;opacity:0;transform:rotate(225deg);animation:wsp 2.6s infinite}.wsp i::before{content:'';position:absolute;left:50%;top:0;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:#39ff88;box-shadow:0 0 8px #39ff88}.wsp i:nth-child(2){animation-delay:.15s}.wsp i:nth-child(3){animation-delay:.3s}.wsp i:nth-child(4){animation-delay:.45s}.wsp i:nth-child(5){animation-delay:.6s}@keyframes wsp{0%{transform:rotate(225deg);opacity:1;animation-timing-function:ease-out}7%{transform:rotate(345deg);animation-timing-function:linear}30%{transform:rotate(455deg);animation-timing-function:ease-in-out}39%{transform:rotate(690deg);animation-timing-function:linear}70%{transform:rotate(815deg);opacity:1;animation-timing-function:ease-out}75%{transform:rotate(945deg);animation-timing-function:ease-out}76%{transform:rotate(945deg);opacity:0}100%{transform:rotate(945deg);opacity:0}}";
+        document.head.appendChild(st);
+      }
+      while(d.firstChild)d.removeChild(d.firstChild);
+      var sp=document.createElement("div");sp.className="wsp";sp.innerHTML="<i></i><i></i><i></i><i></i><i></i>";
+      var lt=document.createElement("div");lt.style.cssText="text-transform:none;letter-spacing:.04em;opacity:.85";lt.textContent="Kirilmoqda\u2026";
+      d.appendChild(sp);d.appendChild(lt);
+      setTimeout(function(){gateHide();A.openTalk()},1800);
+    }
+    else{err.textContent="Kod noto'g'ri";inp.value=""}
+  }
+  btn.onclick=go;
+  inp.onkeydown=function(e){if(e.key==="Enter")go()};
+  d.appendChild(t);d.appendChild(inp);d.appendChild(err);d.appendChild(btn);
+  document.body.appendChild(d);gateEl=d;
+}
+
 A.openTalk=function(){
   if(T.on)return;
+  if(!creatorOk()){gateShow();return}
   T.on=true;if(!T.started)T.started=Date.now();
   var log=$("tklog");if(log)log.innerHTML="";
   var p=$("p-talk");if(p)p.classList.add("on");
@@ -2755,6 +2810,7 @@ A.openTalk=function(){
   }
 };
 A.closeTalk=function(){
+  gateHide();
   if(!T.on)return;
   T.on=false;T.listening=false;
   A.stopVoice();A.abortListen();
