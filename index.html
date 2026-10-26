@@ -2760,7 +2760,18 @@ function gateShow(){
   d.style.cssText="position:fixed;left:0;right:0;top:0;bottom:calc(112px + env(safe-area-inset-bottom,0px));z-index:50;background:rgba(2,7,10,.97);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:26px;text-align:center;color:#e9fff4";
   var t=document.createElement("div");
   t.style.cssText="font-size:1.02em;line-height:1.55;max-width:420px;text-transform:none";
-  t.textContent="Uzr, suhbat bo'limi hozir testda, shuning uchun unga faqat Creator kira oladi. Agar siz Creator bo'lsangiz, Creator kodini yozing.";
+  t.textContent="Bu bo'lim hozir beta test bosqichida, shuning uchun unga faqat Yaratuvchi kira oladi. Agar siz Yaratuvchi bo'lsangiz, Creator kodini kiriting.";
+  d.className="tkgate";
+  var bd=document.createElement("div");
+  bd.style.cssText="padding:5px 14px;border-radius:999px;border:1px solid rgba(57,255,136,.45);background:rgba(57,255,136,.12);color:#39ff88;font-size:.72em;font-weight:700;letter-spacing:.18em;text-transform:none";
+  bd.textContent="\uD83E\uDDEA BETA TEST";
+  var tt=document.createElement("div");
+  tt.style.cssText="font-size:1.45em;font-weight:650;text-transform:none;letter-spacing:0";
+  tt.textContent="Suhbat bo'limi beta testda";
+  var bk=document.createElement("button");
+  bk.textContent="Orqaga";
+  bk.style.cssText="padding:8px 22px;border-radius:999px;border:1px solid rgba(255,255,255,.2);background:none;color:#a9c9b9;font:inherit;font-size:.9em;text-transform:none";
+  bk.onclick=function(){gateHide();var n=document.querySelector('nav button[data-p="home"]');if(n)n.click()};
   var inp=document.createElement("input");
   inp.type="password";inp.placeholder="Creator kodi";inp.autocomplete="off";
   inp.style.cssText="width:100%;max-width:320px;box-sizing:border-box;padding:14px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#e9fff4;font:inherit;text-align:center;text-transform:none";
@@ -2788,7 +2799,7 @@ function gateShow(){
   }
   btn.onclick=go;
   inp.onkeydown=function(e){if(e.key==="Enter")go()};
-  d.appendChild(t);d.appendChild(inp);d.appendChild(err);d.appendChild(btn);
+  d.appendChild(bd);d.appendChild(tt);d.appendChild(t);d.appendChild(inp);d.appendChild(err);d.appendChild(btn);d.appendChild(bk);
   document.body.appendChild(d);gateEl=d;
 }
 
@@ -3359,5 +3370,215 @@ requestAnimationFrame(frame);
 function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
 function fmt(r){return esc(r).replace(/^#{1,4}\s*(.+)$/gm,"<b>$1</b>").replace(/\*\*([\s\S]+?)\*\*/g,"<b>$1</b>").replace(/(^|[\s(])\*(?!\s)([^*\n]+?)\*(?=[\s).,!?:;]|$)/g,"$1<i>$2</i>").replace(/^(\s*)[-*•]\s+/gm,"$1• ")}
 new MutationObserver(function(){if(busy)return;busy=1;L.querySelectorAll(".aia").forEach(function(e){if(e.querySelector(".aiq"))return;var r=e.textContent;if(/\*|^\s*[-#]\s/m.test(r)){var h=fmt(r);if(h!==e.innerHTML){e.dataset.md=1;e.innerHTML=h}}});setTimeout(function(){busy=0},0)}).observe(L,{childList:true,subtree:true,characterData:true})})();</script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4da0fca1c00bf76',t:'MTc5MjUyMDY5MA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4da0fca1c00bf76',t:'MTc5MjUyMDY5MA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><style id="v3css">
+/* ===== V3: YANGI MENYU + ALFA DIZAYNI ===== */
+:root{--a1:#39ff88;--a2:#6ee7ff;--a3:#8a5cff}
+/* --- Pastki dock --- */
+nav{width:min(94%,440px)!important;padding:8px 8px!important;border-radius:28px!important;background:linear-gradient(180deg,rgba(18,26,24,.72),rgba(6,10,10,.78))!important;border:1px solid rgba(255,255,255,.14)!important;box-shadow:0 18px 50px -10px rgba(0,0,0,.7),0 0 0 1px rgba(57,255,136,.05),inset 0 1px 0 rgba(255,255,255,.12)!important;backdrop-filter:blur(30px) saturate(170%)!important;-webkit-backdrop-filter:blur(30px) saturate(170%)!important;overflow:visible!important}
+nav button{border-radius:20px!important;padding:8px 0 6px!important;font-size:.58em!important;letter-spacing:.04em;gap:3px!important;color:#8fa59b!important;font-weight:500;transition:color .3s,transform .4s var(--ease)!important}
+nav button svg{width:23px!important;height:23px!important;stroke-width:1.7!important;transition:transform .45s var(--ease),stroke .3s}
+nav button:active{transform:scale(.9)}
+nav button.on{color:#fff!important;font-weight:600}
+nav button.on svg{stroke:var(--a1);filter:drop-shadow(0 0 7px var(--a1))!important;transform:translateY(-1px)}
+nav .ind{top:4px!important;bottom:4px!important;border-radius:20px!important;background:linear-gradient(180deg,rgba(57,255,136,.20),rgba(110,231,255,.07))!important;box-shadow:inset 0 0 0 1px rgba(57,255,136,.28),0 0 22px -4px rgba(57,255,136,.45)!important}
+nav .ind::after{content:"";position:absolute;left:50%;bottom:-1px;width:16px;height:3px;margin-left:-8px;border-radius:3px;background:var(--a1);box-shadow:0 0 10px var(--a1)}
+/* ALFA — markaziy yorqin tugma */
+nav button[data-p="ai"]{overflow:visible;color:#dffff0!important}
+nav button[data-p="ai"] i{width:50px;height:50px;margin-top:-22px;border-radius:50%;display:flex!important;align-items:center;justify-content:center;font-size:1em!important;background:radial-gradient(circle at 35% 28%,#eafff6,#39ff88 46%,#0aa76a 100%);box-shadow:0 8px 24px -4px rgba(57,255,136,.7),0 0 0 4px rgba(6,10,10,.85),inset 0 -6px 12px rgba(0,60,35,.35);animation:v3f 3.4s ease-in-out infinite}
+nav button[data-p="ai"] svg{stroke:#03140c!important;stroke-width:2!important;filter:none!important;width:24px!important;height:24px!important}
+nav button[data-p="ai"].on i{box-shadow:0 10px 30px -2px rgba(57,255,136,.95),0 0 0 4px rgba(6,10,10,.85),0 0 0 6px rgba(57,255,136,.4)}
+nav button[data-p="ai"]::after{content:"";position:absolute;left:50%;top:-22px;width:50px;height:50px;margin-left:-25px;border-radius:50%;border:1px solid rgba(57,255,136,.55);animation:v3r 2.8s ease-out infinite;pointer-events:none}
+@keyframes v3f{50%{transform:translateY(-3px)}}
+@keyframes v3r{from{transform:scale(1);opacity:.7}to{transform:scale(1.7);opacity:0}}
+/* --- ALFA sahifasi --- */
+#p-ai{background:radial-gradient(90% 50% at 50% 0%,rgba(57,255,136,.10),transparent 70%),radial-gradient(70% 40% at 100% 30%,rgba(110,231,255,.07),transparent 70%),linear-gradient(180deg,rgba(2,8,7,.72),rgba(1,4,7,.92))!important}
+#p-ai>h1{display:none}
+.alfa-head{margin:2px 0 8px;padding:14px 14px 14px 16px!important;border-radius:26px;background:linear-gradient(135deg,rgba(57,255,136,.10),rgba(110,231,255,.05) 60%,rgba(255,255,255,.03));border:1px solid rgba(57,255,136,.22);box-shadow:0 12px 40px -16px rgba(57,255,136,.4);backdrop-filter:blur(22px)}
+.alfa-tt b{font-size:1.5em!important;letter-spacing:.18em!important;background:linear-gradient(90deg,#fff,var(--a1) 60%,var(--a2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.alfa-tt span{display:flex!important;align-items:center;gap:7px}
+.alfa-tt span::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--a1);box-shadow:0 0 10px var(--a1);animation:v3b 1.8s infinite;flex:none}
+@keyframes v3b{50%{opacity:.3}}
+.alfa-v{width:44px!important;height:44px!important;flex-basis:44px!important}
+.alfa-quick{gap:8px!important;padding:6px 2px 16px!important;margin:0 -4px;mask-image:linear-gradient(90deg,transparent,#000 14px,#000 calc(100% - 22px),transparent)}
+.aq2{padding:10px 15px!important;font-size:.8em!important;border-radius:16px!important;background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03))!important;border:1px solid rgba(255,255,255,.14)!important;font-weight:500;transition:transform .3s var(--ease),border-color .3s,box-shadow .3s}
+.aq2:active{border-color:var(--a1)!important;box-shadow:0 0 18px -4px var(--a1)}
+#aid{border-radius:20px!important;padding:12px 16px!important}
+#aid summary{font-size:.88em;color:var(--sub);cursor:pointer;list-style:none}
+#aid summary::-webkit-details-marker{display:none}
+#aid[open] summary{color:var(--a1);margin-bottom:2px}
+#aid input,#aid select,#aid textarea{width:100%;margin-top:10px;padding:12px 14px;border-radius:14px;border:1px solid var(--hair);background:rgba(0,0,0,.35);color:var(--tx);font:inherit;font-size:.9em;outline:none}
+#aid .sbar input{margin-top:0}
+#aid input:focus,#aid select:focus,#aid textarea:focus{border-color:var(--a1)}
+/* Salomlashuv */
+.aih{padding:10px 0 4px!important}
+.aiq{width:130px!important;height:130px!important}
+.aig2{font-size:1.75em!important;margin:8px 0 18px!important}
+.aics{display:grid!important;grid-template-columns:1fr 1fr;gap:10px!important}
+.aic2{display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-height:92px;padding:14px!important;border-radius:22px!important;font-size:.9em;line-height:1.25;background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.025))!important;position:relative;overflow:hidden}
+.aic2 span{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(57,255,136,.12);border:1px solid rgba(57,255,136,.25)}
+.aic2:nth-child(2) span{background:rgba(110,231,255,.12);border-color:rgba(110,231,255,.28)}
+.aic2:nth-child(3) span{background:rgba(138,92,255,.15);border-color:rgba(138,92,255,.32)}
+.aic2:nth-child(4) span{background:rgba(255,200,60,.13);border-color:rgba(255,200,60,.3)}
+.aic2:first-child{grid-column:1/-1;flex-direction:row;align-items:center;min-height:0;background:linear-gradient(120deg,rgba(57,255,136,.22),rgba(110,231,255,.10))!important;border-color:rgba(57,255,136,.4)!important;font-weight:600}
+@media (max-height:820px){.ais{display:block!important;margin-bottom:12px}.aiq{width:100px!important;height:100px!important}}
+/* Xabarlar */
+#p-ai .aim{font-size:.97em}
+#p-ai .aiu{background:linear-gradient(135deg,rgba(57,255,136,.24),rgba(110,231,255,.14))!important;border:1px solid rgba(57,255,136,.3)!important;border-radius:22px 22px 6px 22px!important;padding:11px 16px!important;box-shadow:0 8px 24px -12px rgba(57,255,136,.5)}
+#p-ai .aia{padding:6px 6px 6px 40px!important;line-height:1.6}
+#p-ai .aia::before{content:"✦";left:4px!important;top:4px!important;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.95em!important;color:#03140c!important;background:radial-gradient(circle at 35% 30%,#eafff6,var(--a1) 55%,#0aa76a);text-shadow:none!important;box-shadow:0 0 14px rgba(57,255,136,.55)}
+#p-ai .aia b{color:var(--a1);font-weight:600}
+.ai-spk,.ai-cp{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 13px;border-radius:999px;border:1px solid rgba(255,255,255,.14)!important;background:rgba(255,255,255,.06)!important;color:#bcd8cb!important;font:inherit;font-size:.74em;transition:transform .25s,border-color .25s}
+.ai-spk:active,.ai-cp:active{transform:scale(.94);border-color:var(--a1)!important}
+.ai-cp.ok{color:var(--a1)!important;border-color:var(--a1)!important}
+/* Yozish paneli */
+.aibar{padding:7px 7px 7px 20px!important;border-radius:32px!important;background:linear-gradient(180deg,rgba(20,28,26,.82),rgba(8,12,12,.86))!important;border:1px solid rgba(255,255,255,.16)!important;box-shadow:0 14px 40px -10px rgba(0,0,0,.65)!important;bottom:calc(104px + env(safe-area-inset-bottom,0px))!important}
+.aibar:focus-within{border-color:var(--a1)!important;box-shadow:0 0 0 4px rgba(57,255,136,.08),0 0 38px -8px var(--a1)!important}
+.alfa-mic{width:48px!important;height:48px!important;flex-basis:48px!important;background:rgba(255,255,255,.07)!important}
+#aig{width:48px;height:48px;padding:0!important;border-radius:50%!important;background:linear-gradient(135deg,var(--a1),#12c97a)!important;color:#02160c!important;font-size:1.15em;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px -4px var(--a1)!important}
+/* Suhbat sahifasi yengil bezak */
+#p-talk{background:radial-gradient(90% 50% at 50% 0%,rgba(110,231,255,.09),transparent 70%),linear-gradient(180deg,rgba(2,8,10,.55),rgba(1,4,7,.85))!important}
+@media (prefers-reduced-motion:reduce){nav button[data-p="ai"] i,nav button[data-p="ai"]::after,.alfa-tt span::before{animation:none}}
+/* ===== V4: OQ AI DIZAYNI (ChatGPT uslubi) ===== */
+body.aiw{overflow:hidden!important}
+body.aiw nav,body.aiw #vm,body.aiw #vs,body.aiw #vp{display:none!important}
+body.aiw canvas[style*="8999"],body.aiw div[style*="8999"]{display:none!important}
+body.aiw #p-ai.on{display:flex!important;flex-direction:column;position:fixed;top:0;left:0;right:0;height:100vh;height:100dvh;z-index:20;margin:0!important;max-width:none!important;padding:env(safe-area-inset-top,0px) 0 0!important;background:#fff!important;border-radius:0;animation:none!important;
+--tx:#16181d!important;--sub:#6b7280!important;--glass:#f4f5f7!important;--hair:rgba(0,0,0,.1)!important;--pr:#0b9b63!important;color:#16181d!important;font-weight:400;letter-spacing:0;text-transform:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body.aiw #p-ai>h1,body.aiw #p-ai .alfa-quick{display:none!important}
+/* Sarlavha */
+body.aiw #p-ai .alfa-head{flex:none;margin:0;padding:10px 12px!important;gap:10px!important;border-radius:0;background:#fff;border:0;border-bottom:1px solid rgba(0,0,0,.08);box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+.alfa-back{flex:none;width:38px;height:38px;border-radius:50%;border:0;background:#f1f2f4;color:#16181d;font-size:24px;line-height:1;padding:0 0 3px;display:flex;align-items:center;justify-content:center}
+.alfa-back:active,.alfa-call:active{transform:scale(.92)}
+.alfa-call{flex:none;width:38px;height:38px;border-radius:50%;border:0;background:#f1f2f4;font-size:16px;display:flex;align-items:center;justify-content:center;padding:0}
+body.aiw #p-ai .alfa-orb{width:36px;height:36px;flex:0 0 36px;font-size:15px}
+body.aiw #p-ai .alfa-orb i{inset:-4px}
+body.aiw #p-ai .alfa-tt b{background:none!important;-webkit-text-fill-color:#16181d!important;color:#16181d!important;font-family:inherit!important;font-size:1.05em!important;font-weight:650;letter-spacing:.06em!important}
+body.aiw #p-ai .alfa-tt span{font-size:.74em;color:#6b7280!important;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.aiw #p-ai .alfa-tt span::before{width:6px;height:6px;background:#0b9b63;box-shadow:none}
+body.aiw #p-ai .alfa-v{width:38px;height:38px;flex:0 0 38px;font-size:16px;background:#f1f2f4!important;border:0!important;color:#16181d!important;box-shadow:none!important}
+/* Sozlamalar */
+body.aiw #p-ai #aid{flex:none;margin:8px 12px 0;padding:10px 14px!important;border-radius:14px!important;background:#f6f7f8!important;border:1px solid rgba(0,0,0,.08)!important;max-height:58vh;overflow:auto;animation:none;backdrop-filter:none}
+body.aiw #p-ai #aid summary{color:#6b7280!important;font-size:.85em}
+body.aiw #p-ai #aid[open] summary{color:#0b9b63!important}
+body.aiw #p-ai #aid input,body.aiw #p-ai #aid select,body.aiw #p-ai #aid textarea{background:#fff!important;color:#16181d!important;border:1px solid rgba(0,0,0,.14)!important;font-size:16px}
+body.aiw #p-ai .fxm{color:#6b7280!important}
+body.aiw #p-ai .btn{background:#16181d!important;color:#fff!important;box-shadow:none!important}
+body.aiw #p-ai .btn.g{background:transparent!important;color:#16181d!important;border:1px solid rgba(0,0,0,.15)!important}
+/* Chat maydoni */
+body.aiw #p-ai #ail{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:14px 16px 8px!important}
+body.aiw #p-ai .aim{font-size:1em;margin:8px 0}
+body.aiw #p-ai .aiu{margin-left:auto;max-width:82%;background:#f0f1f3!important;color:#16181d!important;border:0!important;border-radius:20px!important;padding:10px 15px!important;box-shadow:none!important}
+body.aiw #p-ai .aia{background:none!important;border:0!important;color:#16181d!important;padding:3px 2px 3px 38px!important;line-height:1.65}
+body.aiw #p-ai .aia::before{width:26px;height:26px;top:2px!important;left:2px!important;color:#03140c!important;box-shadow:none;background:radial-gradient(circle at 35% 30%,#eafff6,#39ff88 55%,#0aa76a)}
+body.aiw #p-ai .aia b{color:#0b7a50}
+/* Thinking */
+body.aiw #p-ai .aia.ty::after{content:"Thinking…";display:inline-block;font-size:.98em;letter-spacing:.01em;line-height:26px;background:linear-gradient(90deg,#9aa0a8 30%,#16181d 50%,#9aa0a8 70%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shim2 1.5s linear infinite}
+body.aiw #p-ai .aia.wr::after{content:"";display:inline-block;width:8px;height:8px;margin-left:5px;border-radius:50%;background:#16181d;vertical-align:middle;animation:v3b 1s infinite}
+body.aiw #p-ai .ai-spk,body.aiw #p-ai .ai-cp{background:#f4f5f7!important;color:#5b616b!important;border:1px solid rgba(0,0,0,.1)!important}
+body.aiw #p-ai .ai-cp.ok{color:#0b9b63!important;border-color:#0b9b63!important}
+/* Salomlashuv */
+body.aiw #p-ai .aih{padding:7vh 0 0!important;text-align:center}
+body.aiw #p-ai .aih::before{content:"✦";display:flex;align-items:center;justify-content:center;width:64px;height:64px;margin:0 auto 14px;border-radius:50%;font-size:28px;color:#03140c;background:radial-gradient(circle at 35% 30%,#eafff6,#39ff88 50%,#0aa76a);box-shadow:0 10px 30px -8px rgba(57,255,136,.6)}
+body.aiw #p-ai .aiq,body.aiw #p-ai .aio,body.aiw #p-ai .ais{display:none!important}
+body.aiw #p-ai .aig2{color:#16181d!important;font-family:inherit!important;font-size:1.55em!important;font-weight:650;line-height:1.25;margin:0 0 22px!important}
+body.aiw #p-ai .aig2 b{color:#0b9b63!important}
+body.aiw #p-ai .aic2{text-align:left;color:#16181d!important;background:#fff!important;border:1px solid rgba(0,0,0,.1)!important;box-shadow:0 1px 3px rgba(0,0,0,.05)!important;backdrop-filter:none}
+body.aiw #p-ai .aic2 span{background:#f1f2f4!important;border:0!important}
+body.aiw #p-ai .aic2:first-child{background:#effaf4!important;border-color:#bfead3!important}
+body.aiw #p-ai .aic2:active{background:#f4f5f7!important}
+/* Yozish paneli — doim pastda */
+body.aiw #p-ai .aibar{flex:none;position:relative!important;bottom:auto!important;margin:8px 12px calc(10px + env(safe-area-inset-bottom,0px))!important;padding:6px 6px 6px 18px!important;border-radius:28px!important;background:#fff!important;border:1px solid rgba(0,0,0,.14)!important;box-shadow:0 2px 14px rgba(0,0,0,.08)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+body.aiw #p-ai .aibar:focus-within{border-color:#0b9b63!important;box-shadow:0 0 0 3px rgba(11,155,99,.12)!important}
+body.aiw #p-ai .aibar .sbar input{color:#16181d!important;font-size:16px!important;padding:11px 4px!important}
+body.aiw #p-ai .aibar .sbar input::placeholder{color:#9aa0a8!important}
+body.aiw #p-ai .alfa-mic{width:42px;height:42px;flex:0 0 42px;background:#f1f2f4!important;border:0!important;color:#16181d!important}
+body.aiw #p-ai .alfa-mic.on{background:#0b9b63!important;color:#fff!important;box-shadow:none}
+body.aiw #p-ai #aig{width:42px;height:42px;flex:0 0 42px;padding:0!important;border-radius:50%!important;background:#16181d!important;color:#fff!important;box-shadow:none!important;font-size:1.05em}
+/* ===== V6: ozgina App Store oq detallari ===== */
+.as-date{font-size:.7em;font-weight:600;letter-spacing:.14em;text-transform:uppercase!important;color:rgba(255,255,255,.62);margin:2px 0 0}
+.as-ava{position:absolute;right:20px;top:26px;width:40px;height:40px;border-radius:50%;border:0;padding:0;background:#fff;color:#0b0d10;font:inherit;font-weight:700;font-size:1.05em;box-shadow:0 6px 18px rgba(0,0,0,.45);z-index:2}
+.as-ava:active{transform:scale(.92)}
+#p-home{position:relative}
+/* Bugun kartalaridagi oq yorliq */
+body .n span{position:absolute!important;top:18px;left:20px;margin:0!important;padding:4px 11px;border-radius:999px;background:#fff;color:#0b0d10!important;opacity:1!important;font-size:.62em!important;font-weight:700;letter-spacing:.1em!important;text-transform:uppercase}
+/* Ilova ikonkasi shakli */
+body .th{border-radius:22%!important;border:0!important;box-shadow:0 0 0 1px rgba(255,255,255,.18),0 6px 16px rgba(0,0,0,.45)}
+/* "Ochish" oq tugmasi */
+#p-home .card.row{align-items:center}
+#p-home .card.row::after{content:"Ochish";position:static;inset:auto;flex:none;margin-left:auto;padding:6px 16px;border-radius:999px;background:#fff;color:#0b0d10;font-weight:700;font-size:.78em;letter-spacing:0;opacity:1;pointer-events:none;text-transform:none}
+/* Bo'lim sarlavhalari */
+body h3 small{color:#fff;opacity:.7;letter-spacing:.04em;text-transform:none}
+/* Kartalarda yupqa oq yorug'lik */
+body .card,body .stats div{box-shadow:inset 0 1px 0 rgba(255,255,255,.10)!important}
+body .av{box-shadow:0 0 0 3px #fff,0 0 0 10px rgba(255,255,255,.07),0 12px 30px rgba(0,0,0,.5)}
+/* Menyu: oq aktiv belgi */
+nav .ind{background:linear-gradient(180deg,rgba(255,255,255,.20),rgba(255,255,255,.07))!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)!important}
+nav .ind::after{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.8)}
+nav button.on{color:#fff!important}
+nav button.on svg{stroke:#fff;filter:drop-shadow(0 0 5px rgba(255,255,255,.55))!important}
+nav button[data-p="ai"].on svg{stroke:#03140c!important;filter:none!important}
+body.aiw .tkgate{bottom:0!important}
+</style>
+<script id="v3js">(function(){
+/* Xabarlarga "Nusxa" tugmasi */
+var L=document.getElementById("ail");
+if(L){
+ function addCp(e){
+  if(e.querySelector(".ai-cp")||e.classList.contains("ty")||e.querySelector(".aiq"))return;
+  var raw=e.dataset.raw||"";if(raw.length<8||!e.querySelector(".ai-spk"))return;
+  var b=document.createElement("button");b.type="button";b.className="ai-cp";b.innerHTML="<span>📋</span><span>Nusxa</span>";
+  b.onclick=function(){var t=(e.dataset.raw||e.textContent).replace(/\s+$/,"");
+   var done=function(){b.classList.add("ok");b.lastChild.textContent="Nusxalandi";setTimeout(function(){b.classList.remove("ok");b.lastChild.textContent="Nusxa"},1600)};
+   try{navigator.clipboard.writeText(t).then(done,done)}catch(x){var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy")}catch(_){}ta.remove();done()}};
+  var s=e.querySelector(".ai-spk");s.insertAdjacentElement("afterend",b)}
+ var busy=0;
+ new MutationObserver(function(){if(busy)return;busy=1;setTimeout(function(){L.querySelectorAll(".aia").forEach(addCp);busy=0},120)}).observe(L,{childList:true,subtree:true});
+}
+/* Menyuda aktiv tugma uchun yumshoq haptic */
+var nav=document.querySelector("nav");
+if(nav)nav.addEventListener("click",function(e){var b=e.target.closest("button");if(b&&window.Telegram&&Telegram.WebApp&&Telegram.WebApp.HapticFeedback){try{Telegram.WebApp.HapticFeedback.selectionChanged()}catch(_){}}});
+})();
+
+(function(){
+var p=document.getElementById("p-ai"),L=document.getElementById("ail");if(!p)return;
+function f(){document.body.classList.toggle("aiw",p.classList.contains("on"))}
+new MutationObserver(f).observe(p,{attributes:true,attributeFilter:["class"]});f();
+/* Orqaga + qo'ng'iroq tugmalari */
+var hd=p.querySelector(".alfa-head");
+if(hd&&!hd.querySelector(".alfa-back")){
+ var bk=document.createElement("button");bk.type="button";bk.className="alfa-back";bk.setAttribute("aria-label","orqaga");bk.textContent="‹";
+ bk.onclick=function(){var n=document.querySelector('nav button[data-p="home"]');if(n)n.click()};
+ hd.insertBefore(bk,hd.firstChild);
+ var cl=document.createElement("button");cl.type="button";cl.className="alfa-call";cl.setAttribute("aria-label","suhbat");cl.textContent="📞";
+ cl.onclick=function(){var t=p.querySelector(".aq2[data-talk]");if(t)t.click()};
+ var v=document.getElementById("alv");hd.insertBefore(cl,v||null);
+}
+/* Doim pastga aylantirish + yozilayotganda kursor */
+if(L){
+ new MutationObserver(function(){
+  requestAnimationFrame(function(){L.scrollTop=L.scrollHeight});
+  var a=L.querySelectorAll(".aia");a.forEach(function(x){x.classList.remove("wr")});
+  var l=a[a.length-1];if(l&&window.ALFA&&window.ALFA.busy&&!l.classList.contains("ty"))l.classList.add("wr");
+ }).observe(L,{childList:true,subtree:true,characterData:true});
+}
+})();
+
+(function(){
+var h=document.querySelector("#p-home h1");if(!h||document.querySelector(".as-date"))return;
+var M=["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"],D=["Yakshanba","Dushanba","Seshanba","Chorshanba","Payshanba","Juma","Shanba"];
+var n=new Date(),d=document.createElement("div");d.className="as-date";d.textContent=D[n.getDay()]+", "+n.getDate()+" "+M[n.getMonth()];
+h.parentNode.insertBefore(d,h);
+var a=document.createElement("button");a.type="button";a.className="as-ava";a.setAttribute("aria-label","profil");
+a.onclick=function(){var b=document.querySelector('nav button[data-p="me"]');if(b)b.click()};
+h.parentNode.appendChild(a);
+function up(){var t=((document.getElementById("hi")||{}).textContent||"").trim();a.textContent=t?t.charAt(0).toUpperCase():"Q"}
+up();setInterval(up,2000);
+})();
+
+/* Telegram/iOS: audio birinchi bosishda ochiladi, shunda ALFA keyin ovoz chiqara oladi */
+(function(){var n=0;function u(){try{if(window.ALFA&&ALFA.unlock){ALFA.unlock();if(++n>=2){["pointerdown","touchend","click"].forEach(function(t){document.removeEventListener(t,u,true)})}}}catch(e){}}
+["pointerdown","touchend","click"].forEach(function(t){document.addEventListener(t,u,true)});
+var tg=window.Telegram&&Telegram.WebApp;if(tg){try{tg.ready();tg.expand()}catch(e){}}})();
+</script>
+</body>
 </html>
